@@ -4,7 +4,7 @@ This repository contains the configuration management code using Ansible for dep
 
 ## Directory Structure
 
-- `PORT_REGISTRY.md`: Contains the list of allocated and used ports for all services.
+- `data/`: Contains documentation and configuration data files like `port.md` and `access.md`.
 - `inventories/`: Contains environment-specific host definitions and variables (`dev`, `prod`).
 - `playbooks/`: Entrypoint playbooks (`setup_dev.yml`, `setup_prod.yml`).
 - `roles/`: Ansible roles organized by category (`base`, `databases`, `cache`, `messaging`, `orchestration`, `iam`, `security`, `networking`, `observability`).
