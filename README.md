@@ -4,9 +4,10 @@ This repository contains the configuration management code using Ansible for dep
 
 ## Directory Structure
 
+- `PORT_REGISTRY.md`: Contains the list of allocated and used ports for all services.
 - `inventories/`: Contains environment-specific host definitions and variables (`dev`, `prod`).
 - `playbooks/`: Entrypoint playbooks (`setup_dev.yml`, `setup_prod.yml`).
-- `roles/`: Ansible roles organized by category (e.g., `base`, `databases`, `observability`, `integration`, `messaging`, `cache`, `gateway`).
+- `roles/`: Ansible roles organized by category (`base`, `databases`, `cache`, `messaging`, `orchestration`, `iam`, `security`, `networking`, `observability`).
 
 ## Quick Start
 
@@ -21,5 +22,5 @@ ansible-playbook -i inventories/dev/hosts.ini playbooks/setup_dev.yml
 
 Run specific roles using tags:
 ```bash
-ansible-playbook -i inventories/dev/hosts.ini playbooks/setup_dev.yml --tags "infisical,rabbitmq"
+ansible-playbook -i inventories/dev/hosts.ini playbooks/setup_dev.yml --tags "redis,rabbitmq"
 ```
