@@ -1,0 +1,17 @@
+# Ansible specific
+*.retry
+*.log
+roles/galaxy/
+.ansible/
+inventory/*/*_vars/*.local
+inventory/*/*_vars/secret.yml
+vault_password.txt
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
