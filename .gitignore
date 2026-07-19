@@ -1,11 +1,12 @@
 # Ansible specific
 *.retry
 *.log
-roles/galaxy/
 .ansible/
-inventory/*/*_vars/*.local
-inventory/*/*_vars/secret.yml
-vault_password.txt
+ansible.cfg
+inventories/*/group_vars/
+*.pem
+*.key
+*.env
 
 # OS generated files
 .DS_Store
