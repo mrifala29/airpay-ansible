@@ -1,0 +1,9 @@
+services:
+  aerospike:
+    image: aerospike/aerospike-server:{{ aerospike_version }}
+    container_name: airpay-aerospike
+    restart: unless-stopped
+    volumes:
+      - {{ aerospike_config_dir }}/aerospike.conf:/opt/aerospike/etc/aerospike.conf
+      - {{ aerospike_data_dir }}:/opt/aerospike/data
+    network_mode: "host"

@@ -1,0 +1,43 @@
+# Aerospike Configuration for Airpay
+service {
+    paxos-single-replica-limit 1
+    pidfile /var/run/aerospike/asd.pid
+    proto-fd-max 15000
+}
+
+logging {
+    console {
+        context any info
+    }
+}
+
+network {
+    service {
+        address any
+        port {{ aerospike_port_service }}
+    }
+    heartbeat {
+        mode multicast
+        multicast-group 239.1.99.222
+        port {{ aerospike_port_heartbeat }}
+        interval 150
+        timeout 10
+    }
+    fabric {
+        port {{ aerospike_port_fabric }}
+    }
+    info {
+        port {{ aerospike_port_info }}
+    }
+}
+
+namespace test {
+    replication-factor 1
+    memory-size 1G
+    default-ttl 0
+    storage-engine device {
+        file /opt/aerospike/data/test.dat
+        filesize 4G
+        data-in-memory true
+    }
+}

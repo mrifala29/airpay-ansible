@@ -1,0 +1,14 @@
+---
+# Image
+aerospike_version: "ce-7.0.0.3"
+
+# Network
+aerospike_port_service: 3300
+aerospike_port_fabric: 3301
+aerospike_port_heartbeat: 3302
+aerospike_port_info: 3303
+
+# Paths
+aerospike_data_dir: "/opt/airpay/aerospike/data"
+aerospike_config_dir: "/opt/airpay/aerospike/config"
+aerospike_compose_dir: "/opt/airpay/aerospike"

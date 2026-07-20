@@ -1,0 +1,33 @@
+---
+- name: Create Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+  loop:
+    - "{{ aerospike_compose_dir }}"
+    - "{{ aerospike_data_dir }}"
+    - "{{ aerospike_config_dir }}"
+
+- name: Template Config
+  template:
+    src: aerospike.conf.j2
+    dest: "{{ aerospike_config_dir }}/aerospike.conf"
+    mode: '0644'
+  notify: Restart Aerospike
+
+- name: Template Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ aerospike_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart Aerospike
+
+- name: Start Aerospike
+  command: docker compose up -d
+  args:
+    chdir: "{{ aerospike_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"
