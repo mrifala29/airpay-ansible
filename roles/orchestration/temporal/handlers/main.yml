@@ -1,0 +1,5 @@
+---
+- name: Restart Temporal
+  command: docker compose restart
+  args:
+    chdir: "{{ temporal_compose_dir }}"

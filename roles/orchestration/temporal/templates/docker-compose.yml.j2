@@ -1,0 +1,41 @@
+services:
+  temporal-db:
+    image: postgres:{{ temporal_db_version }}
+    container_name: airpay-temporal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: {{ temporal_db_name }}
+      POSTGRES_USER: {{ temporal_db_user }}
+      POSTGRES_PASSWORD: {{ temporal_db_pass }}
+      PGPORT: "{{ temporal_port_db }}"
+    command: -p {{ temporal_port_db }}
+    volumes:
+      - {{ temporal_data_dir }}/postgres:/var/lib/postgresql/data
+    network_mode: "host"
+
+  temporal:
+    image: temporalio/auto-setup:{{ temporal_version }}
+    container_name: airpay-temporal
+    restart: unless-stopped
+    environment:
+      - DB=postgresql
+      - DB_PORT={{ temporal_port_db }}
+      - POSTGRES_USER={{ temporal_db_user }}
+      - POSTGRES_PWD={{ temporal_db_pass }}
+      - POSTGRES_SEEDS=localhost
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+    network_mode: "host"
+    depends_on:
+      - temporal-db
+
+  temporal-ui:
+    image: temporalio/ui:{{ temporal_ui_version }}
+    container_name: airpay-temporal-ui
+    restart: unless-stopped
+    environment:
+      - TEMPORAL_ADDRESS=localhost:{{ temporal_port_grpc }}
+      - TEMPORAL_CORS_ORIGINS=http://localhost:{{ temporal_port_ui }}
+      - PORT={{ temporal_port_ui }}
+    network_mode: "host"
+    depends_on:
+      - temporal
