@@ -1,0 +1,11 @@
+services:
+  rabbitmq:
+    image: rabbitmq:{{ rabbitmq_version }}
+    container_name: airpay-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: {{ rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ rabbitmq_default_pass }}
+    volumes:
+      - {{ rabbitmq_data_dir }}:/var/lib/rabbitmq
+    network_mode: "host"

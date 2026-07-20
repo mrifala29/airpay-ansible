@@ -1,0 +1,25 @@
+---
+- name: Create Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+  loop:
+    - "{{ rabbitmq_compose_dir }}"
+    - "{{ rabbitmq_data_dir }}"
+
+- name: Template Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ rabbitmq_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart RabbitMQ
+
+- name: Start RabbitMQ
+  command: docker compose up -d
+  args:
+    chdir: "{{ rabbitmq_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"

@@ -1,0 +1,15 @@
+---
+# Image
+rabbitmq_version: "3.13-management-alpine"
+
+# Network
+rabbitmq_port_amqp: 5672
+rabbitmq_port_ui: 15672
+
+# Credentials
+rabbitmq_default_user: "guest"
+rabbitmq_default_pass: "guest_strong_password"
+
+# Paths
+rabbitmq_data_dir: "/opt/airpay/rabbitmq/data"
+rabbitmq_compose_dir: "/opt/airpay/rabbitmq"
