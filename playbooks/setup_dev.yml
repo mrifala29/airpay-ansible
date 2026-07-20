@@ -1,0 +1,94 @@
+---
+- name: Setup Base Requirements
+  hosts: airpay_nodes
+  become: true
+  roles:
+    - role: base/common
+      tags: ['base', 'common']
+    - role: base/docker
+      tags: ['base', 'docker']
+
+# ----------------- DATABASES -----------------
+- name: Setup Aerospike
+  hosts: aerospike_nodes
+  become: true
+  roles:
+    - role: databases/aerospike
+      tags: ['database', 'aerospike']
+
+- name: Setup ClickHouse
+  hosts: clickhouse_nodes
+  become: true
+  roles:
+    - role: databases/clickhouse
+      tags: ['database', 'clickhouse']
+
+- name: Setup ScyllaDB
+  hosts: scylladb_nodes
+  become: true
+  roles:
+    - role: databases/scylladb
+      tags: ['database', 'scylladb']
+
+- name: Setup YugabyteDB
+  hosts: yugabytedb_nodes
+  become: true
+  roles:
+    - role: databases/yugabytedb
+      tags: ['database', 'yugabytedb']
+
+# ----------------- CACHE -----------------
+- name: Setup Redis
+  hosts: redis_nodes
+  become: true
+  roles:
+    - role: cache/redis
+      tags: ['cache', 'redis']
+
+# ----------------- MESSAGING -----------------
+- name: Setup RabbitMQ
+  hosts: rabbitmq_nodes
+  become: true
+  roles:
+    - role: messaging/rabbitmq
+      tags: ['messaging', 'rabbitmq']
+
+# ----------------- ORCHESTRATION -----------------
+- name: Setup Temporal
+  hosts: temporal_nodes
+  become: true
+  roles:
+    - role: orchestration/temporal
+      tags: ['orchestration', 'temporal']
+
+# ----------------- IAM -----------------
+- name: Setup Keycloak
+  hosts: keycloak_nodes
+  become: true
+  roles:
+    - role: iam/keycloak
+      tags: ['iam', 'keycloak']
+
+# ----------------- SECURITY -----------------
+- name: Setup Infisical
+  hosts: infisical_nodes
+  become: true
+  roles:
+    - role: security/infisical
+      tags: ['security', 'infisical']
+
+# ----------------- NETWORKING -----------------
+- name: Setup APISIX
+  hosts: apisix_nodes
+  become: true
+  roles:
+    - role: networking/apisix
+      tags: ['networking', 'apisix']
+
+# ----------------- OBSERVABILITY -----------------
+- name: Setup Grafana
+  hosts: grafana_nodes
+  become: true
+  roles:
+    - role: observability/grafana
+      tags: ['observability', 'grafana']
