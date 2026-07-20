@@ -1,0 +1,24 @@
+---
+- name: Update apt cache and upgrade packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install common essential packages
+  apt:
+    name:
+      - curl
+      - wget
+      - vim
+      - git
+      - htop
+      - tar
+      - unzip
+      - jq
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Set timezone to UTC
+  timezone:
+    name: UTC
