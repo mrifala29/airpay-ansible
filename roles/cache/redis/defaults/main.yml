@@ -1,15 +1,13 @@
 ---
-# Versi Redis Image Docker
+# Image
 redis_version: "7.2.4-alpine"
 
-# Port Redis
+# Network
 redis_port: 6379
 
-# Default Password Redis (Sangat disarankan dioverride di group_vars/secret.yml pada environment prod)
+# Credentials
 redis_password: "redis_strong_password_change_me"
 
-# Direktori Data Persisten di Host EC2
+# Paths
 redis_data_dir: "/opt/airpay/redis/data"
-
-# Direktori Tempat Menyimpan File docker-compose.yml
 redis_compose_dir: "/opt/airpay/redis"
