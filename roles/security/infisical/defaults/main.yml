@@ -1,0 +1,19 @@
+---
+# Image
+infisical_version: "latest"
+infisical_db_version: "13-alpine"
+
+# Network
+infisical_port: 8089
+infisical_port_db: 5434
+
+# Credentials
+infisical_db_user: "infisical"
+infisical_db_pass: "infisical_db_strong_password"
+infisical_db_name: "infisical"
+infisical_auth_secret: "super_secret_auth_key"
+infisical_encryption_key: "super_secret_encryption_key"
+
+# Paths
+infisical_data_dir: "/opt/airpay/infisical/data"
+infisical_compose_dir: "/opt/airpay/infisical"

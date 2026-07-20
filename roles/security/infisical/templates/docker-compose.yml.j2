@@ -1,0 +1,29 @@
+services:
+  infisical-db:
+    image: postgres:{{ infisical_db_version }}
+    container_name: airpay-infisical-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: {{ infisical_db_name }}
+      POSTGRES_USER: {{ infisical_db_user }}
+      POSTGRES_PASSWORD: {{ infisical_db_pass }}
+      PGPORT: "{{ infisical_port_db }}"
+    command: -p {{ infisical_port_db }}
+    volumes:
+      - {{ infisical_data_dir }}/postgres:/var/lib/postgresql/data
+    network_mode: "host"
+
+  infisical:
+    image: infisical/infisical:{{ infisical_version }}
+    container_name: airpay-infisical
+    restart: unless-stopped
+    environment:
+      - DB_CONNECTION_URI=postgres://{{ infisical_db_user }}:{{ infisical_db_pass }}@localhost:{{ infisical_port_db }}/{{ infisical_db_name }}
+      - REDIS_URL=redis://localhost:6379
+      - ENCRYPTION_KEY={{ infisical_encryption_key }}
+      - AUTH_SECRET={{ infisical_auth_secret }}
+      - PORT={{ infisical_port }}
+      - NODE_ENV=production
+    network_mode: "host"
+    depends_on:
+      - infisical-db
