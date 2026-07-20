@@ -1,0 +1,21 @@
+---
+# Image
+keycloak_version: "24.0.2"
+keycloak_db_version: "15.6-alpine"
+
+# Network
+keycloak_port: 8080
+
+# Credentials
+keycloak_admin_user: "admin"
+keycloak_admin_password: "kc_strong_password"
+keycloak_db_name: "keycloak"
+keycloak_db_user: "keycloak"
+keycloak_db_password: "kc_db_strong_password"
+
+# Command
+keycloak_command: "start-dev"
+
+# Paths
+keycloak_data_dir: "/opt/airpay/keycloak/data"
+keycloak_compose_dir: "/opt/airpay/keycloak"

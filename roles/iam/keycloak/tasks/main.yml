@@ -1,0 +1,26 @@
+---
+- name: Create Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+  loop:
+    - "{{ keycloak_compose_dir }}"
+    - "{{ keycloak_data_dir }}"
+    - "{{ keycloak_data_dir }}/postgres"
+
+- name: Template Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ keycloak_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart Keycloak
+
+- name: Start Keycloak
+  command: docker compose up -d
+  args:
+    chdir: "{{ keycloak_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"

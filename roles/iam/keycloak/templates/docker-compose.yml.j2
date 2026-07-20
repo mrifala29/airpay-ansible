@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:{{ keycloak_db_version }}
+    container_name: keycloak-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: {{ keycloak_db_name }}
+      POSTGRES_USER: {{ keycloak_db_user }}
+      POSTGRES_PASSWORD: {{ keycloak_db_password }}
+    volumes:
+      - {{ keycloak_data_dir }}/postgres:/var/lib/postgresql/data
+    network_mode: "host"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:{{ keycloak_version }}
+    container_name: airpay-keycloak
+    restart: unless-stopped
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://localhost:5432/{{ keycloak_db_name }}
+      KC_DB_USERNAME: {{ keycloak_db_user }}
+      KC_DB_PASSWORD: {{ keycloak_db_password }}
+      KEYCLOAK_ADMIN: {{ keycloak_admin_user }}
+      KEYCLOAK_ADMIN_PASSWORD: {{ keycloak_admin_password }}
+      KC_HTTP_PORT: {{ keycloak_port }}
+    command: {{ keycloak_command }}
+    network_mode: "host"
+    depends_on:
+      - postgres
