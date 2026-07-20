@@ -1,0 +1,25 @@
+---
+- name: Ensure Redis directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+  loop:
+    - "{{ redis_compose_dir }}"
+    - "{{ redis_data_dir }}"
+
+- name: Generate docker-compose.yml for Redis
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ redis_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart Redis
+
+- name: Start Redis via Docker Compose
+  command: docker compose up -d
+  args:
+    chdir: "{{ redis_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"

@@ -1,0 +1,9 @@
+services:
+  redis:
+    image: redis:{{ redis_version }}
+    container_name: airpay-redis
+    restart: unless-stopped
+    command: redis-server --requirepass {{ redis_password }}
+    network_mode: "host"
+    volumes:
+      - {{ redis_data_dir }}:/data
