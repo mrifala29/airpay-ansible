@@ -1,0 +1,25 @@
+---
+- name: Create Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+  loop:
+    - "{{ yugabyte_compose_dir }}"
+    - "{{ yugabyte_data_dir }}"
+
+- name: Template Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ yugabyte_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart Yugabyte
+
+- name: Start Yugabyte
+  command: docker compose up -d
+  args:
+    chdir: "{{ yugabyte_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"

@@ -1,0 +1,15 @@
+---
+# Image
+yugabyte_version: "2.20.1.3-b3"
+
+# Network
+yugabyte_port_master_rpc: 7002
+yugabyte_port_master_web: 7100
+yugabyte_port_tserver_rpc: 9002
+yugabyte_port_tserver_web: 9100
+yugabyte_port_ysql: 5435
+yugabyte_port_ycql: 9043
+
+# Paths
+yugabyte_data_dir: "/opt/airpay/yugabyte/data"
+yugabyte_compose_dir: "/opt/airpay/yugabyte"

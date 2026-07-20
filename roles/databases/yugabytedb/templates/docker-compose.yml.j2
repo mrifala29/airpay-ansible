@@ -1,0 +1,21 @@
+services:
+  yugabyte:
+    image: yugabytedb/yugabyte:{{ yugabyte_version }}
+    container_name: airpay-yugabyte
+    restart: unless-stopped
+    command: >
+      bin/yugabyted start --daemon=false
+      --master_rpc_port={{ yugabyte_port_master_rpc }}
+      --master_webserver_port={{ yugabyte_port_master_web }}
+      --tserver_rpc_port={{ yugabyte_port_tserver_rpc }}
+      --tserver_webserver_port={{ yugabyte_port_tserver_web }}
+      --ysql_port={{ yugabyte_port_ysql }}
+      --ycql_port={{ yugabyte_port_ycql }}
+      --base_dir=/var/lib/yugabyte
+    volumes:
+      - {{ yugabyte_data_dir }}:/var/lib/yugabyte
+    network_mode: "host"
+    ulimits:
+      nofile:
+        soft: 1048576
+        hard: 1048576
