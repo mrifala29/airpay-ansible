@@ -1,0 +1,14 @@
+---
+# Image
+grafana_version: "10.4.1"
+
+# Network
+grafana_port: 3000
+
+# Credentials
+grafana_admin_user: "admin"
+grafana_admin_password: "grafana_strong_password"
+
+# Paths
+grafana_data_dir: "/opt/airpay/grafana/data"
+grafana_compose_dir: "/opt/airpay/grafana"

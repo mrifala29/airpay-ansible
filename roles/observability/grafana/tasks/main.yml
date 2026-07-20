@@ -1,0 +1,30 @@
+---
+- name: Create Compose Directory
+  file:
+    path: "{{ grafana_compose_dir }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+
+- name: Create Data Directory
+  file:
+    path: "{{ grafana_data_dir }}"
+    state: directory
+    mode: '0755'
+    owner: "472"
+    group: "472"
+
+- name: Template Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ grafana_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart Grafana
+
+- name: Start Grafana
+  command: docker compose up -d
+  args:
+    chdir: "{{ grafana_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"

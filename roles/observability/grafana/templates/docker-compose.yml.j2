@@ -1,0 +1,12 @@
+services:
+  grafana:
+    image: grafana/grafana:{{ grafana_version }}
+    container_name: airpay-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: {{ grafana_admin_user }}
+      GF_SECURITY_ADMIN_PASSWORD: {{ grafana_admin_password }}
+      GF_SERVER_HTTP_PORT: {{ grafana_port }}
+    volumes:
+      - {{ grafana_data_dir }}:/var/lib/grafana
+    network_mode: "host"
