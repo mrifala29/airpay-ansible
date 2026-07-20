@@ -1,0 +1,16 @@
+---
+# Image
+scylla_version: "5.4.4"
+
+# Network
+scylla_port_cql: 9042
+scylla_port_thrift: 9160
+scylla_port_internode: 7000
+scylla_port_api: 10000
+
+# Settings
+scylla_cluster_name: "airpay-scylla-cluster"
+
+# Paths
+scylla_data_dir: "/opt/airpay/scylla/data"
+scylla_compose_dir: "/opt/airpay/scylla"

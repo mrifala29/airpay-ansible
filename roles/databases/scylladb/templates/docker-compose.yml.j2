@@ -1,0 +1,13 @@
+services:
+  scylladb:
+    image: scylladb/scylla:{{ scylla_version }}
+    container_name: airpay-scylla
+    restart: unless-stopped
+    command: --smp 1 --memory 1G --overprovisioned 1 --cluster-name {{ scylla_cluster_name }}
+    volumes:
+      - {{ scylla_data_dir }}:/var/lib/scylla
+    network_mode: "host"
+    ulimits:
+      nofile:
+        soft: 100000
+        hard: 100000
