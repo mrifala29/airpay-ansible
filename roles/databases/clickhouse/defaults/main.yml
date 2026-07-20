@@ -1,0 +1,16 @@
+---
+# Image
+clickhouse_version: "24.3-alpine"
+
+# Network
+clickhouse_port_http: 8123
+clickhouse_port_tcp: 9000
+
+# Credentials
+clickhouse_user: "default"
+clickhouse_password: "clickhouse_strong_password"
+
+# Paths
+clickhouse_data_dir: "/opt/airpay/clickhouse/data"
+clickhouse_log_dir: "/opt/airpay/clickhouse/log"
+clickhouse_compose_dir: "/opt/airpay/clickhouse"
