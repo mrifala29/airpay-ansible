@@ -1,0 +1,14 @@
+---
+# Orchestration Group Vars (DEV)
+
+# TEMPORAL
+temporal_version: "1.23.1"
+temporal_ui_version: "2.26.2"
+temporal_port_grpc: 7233
+temporal_port_ui: 8088
+temporal_port_db: 5433
+temporal_db_user: "temporal"
+temporal_db_pass: "temporal_db_dev_password"
+temporal_db_name: "temporal"
+temporal_data_dir: "/opt/airpay/temporal/data"
+temporal_compose_dir: "/opt/airpay/temporal"

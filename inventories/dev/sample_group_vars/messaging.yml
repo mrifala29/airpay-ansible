@@ -1,0 +1,11 @@
+---
+# Messaging Group Vars (DEV)
+
+# RABBITMQ
+rabbitmq_version: "3.13-management-alpine"
+rabbitmq_port_amqp: 5672
+rabbitmq_port_ui: 15672
+rabbitmq_default_user: "admin"
+rabbitmq_default_pass: "rmq_dev_password_123"
+rabbitmq_data_dir: "/opt/airpay/rabbitmq/data"
+rabbitmq_compose_dir: "/opt/airpay/rabbitmq"

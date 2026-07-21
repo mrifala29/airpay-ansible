@@ -1,0 +1,9 @@
+---
+# Cache Group Vars (DEV)
+
+# REDIS
+redis_version: "7.2.4-alpine"
+redis_port: 6379
+redis_password: "redis_dev_password_123"
+redis_data_dir: "/opt/airpay/redis/data"
+redis_compose_dir: "/opt/airpay/redis"

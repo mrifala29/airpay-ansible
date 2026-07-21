@@ -1,0 +1,43 @@
+---
+# Databases Group Vars (DEV)
+
+# AEROSPIKE
+aerospike_version: "ce-7.0.0.3"
+aerospike_port_service: 3300
+aerospike_port_fabric: 3301
+aerospike_port_heartbeat: 3302
+aerospike_port_info: 3303
+aerospike_data_dir: "/opt/airpay/aerospike/data"
+aerospike_config_dir: "/opt/airpay/aerospike/config"
+aerospike_compose_dir: "/opt/airpay/aerospike"
+
+# CLICKHOUSE
+clickhouse_version: "24.3-alpine"
+clickhouse_port_http: 8123
+clickhouse_port_tcp: 9000
+clickhouse_user: "default"
+clickhouse_password: "ch_dev_password_123"
+clickhouse_data_dir: "/opt/airpay/clickhouse/data"
+clickhouse_log_dir: "/opt/airpay/clickhouse/log"
+clickhouse_compose_dir: "/opt/airpay/clickhouse"
+
+# SCYLLADB
+scylla_version: "5.4.4"
+scylla_port_cql: 9042
+scylla_port_thrift: 9160
+scylla_port_internode: 7000
+scylla_port_api: 10000
+scylla_cluster_name: "airpay-scylla-cluster-dev"
+scylla_data_dir: "/opt/airpay/scylla/data"
+scylla_compose_dir: "/opt/airpay/scylla"
+
+# YUGABYTEDB
+yugabyte_version: "2.20.1.3-b3"
+yugabyte_port_master_rpc: 7002
+yugabyte_port_master_web: 7100
+yugabyte_port_tserver_rpc: 9002
+yugabyte_port_tserver_web: 9100
+yugabyte_port_ysql: 5435
+yugabyte_port_ycql: 9043
+yugabyte_data_dir: "/opt/airpay/yugabyte/data"
+yugabyte_compose_dir: "/opt/airpay/yugabyte"
