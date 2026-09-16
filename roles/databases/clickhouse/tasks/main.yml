@@ -1,15 +1,23 @@
 ---
-- name: Create Directories
+- name: Mount EBS data disk
+  include_tasks: ../../base/common/tasks/mount_disk.yml
+  vars:
+    target_mount_dir: "{{ clickhouse_data_dir }}"
+    mount_owner: "ubuntu"
+    mount_group: "docker"
+    mount_mode: "0777"
+
+- name: Create Compose and Log Directories
   file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     state: directory
-    mode: '0755'
+    mode: "{{ item.mode }}"
     owner: ubuntu
     group: docker
   loop:
-    - "{{ clickhouse_compose_dir }}"
-    - "{{ clickhouse_data_dir }}"
-    - "{{ clickhouse_log_dir }}"
+    - { path: "{{ clickhouse_compose_dir }}", mode: "0755" }
+    - { path: "{{ clickhouse_log_dir }}", mode: "0777" }
+    - { path: "{{ clickhouse_data_dir }}", mode: "0777" }
 
 - name: Template Compose
   template:

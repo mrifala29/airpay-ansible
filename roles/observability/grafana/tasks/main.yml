@@ -1,4 +1,11 @@
 ---
+- name: Mount EBS data disk
+  include_tasks: ../../base/common/tasks/mount_disk.yml
+  vars:
+    target_mount_dir: "{{ grafana_data_dir }}"
+    mount_owner: "472"
+    mount_group: "472"
+
 - name: Create Compose Directory
   file:
     path: "{{ grafana_compose_dir }}"
@@ -7,7 +14,7 @@
     owner: ubuntu
     group: docker
 
-- name: Create Data Directory
+- name: Ensure Data Directory Permissions
   file:
     path: "{{ grafana_data_dir }}"
     state: directory

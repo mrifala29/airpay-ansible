@@ -1,14 +1,18 @@
 ---
-- name: Create Directories
+- name: Mount EBS data disk
+  include_tasks: ../../base/common/tasks/mount_disk.yml
+  vars:
+    target_mount_dir: "{{ yugabyte_data_dir }}"
+    mount_owner: "ubuntu"
+    mount_group: "docker"
+
+- name: Create Compose Directory
   file:
-    path: "{{ item }}"
+    path: "{{ yugabyte_compose_dir }}"
     state: directory
     mode: '0755'
     owner: ubuntu
     group: docker
-  loop:
-    - "{{ yugabyte_compose_dir }}"
-    - "{{ yugabyte_data_dir }}"
 
 - name: Template Compose
   template:

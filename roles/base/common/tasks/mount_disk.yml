@@ -1,0 +1,45 @@
+---
+# mount ebs disk
+- name: Detect secondary EBS data disk
+  shell: |
+    lsblk -dn -o NAME,TYPE | awk '$2=="disk" && $1 !~ /nvme0n1|loop/ {print "/dev/"$1; exit}'
+  register: detected_ebs_disk
+  changed_when: false
+
+- name: Check filesystem on data disk
+  command: "blkid -s TYPE -o value {{ detected_ebs_disk.stdout }}"
+  register: ebs_disk_fs
+  failed_when: false
+  changed_when: false
+  when: detected_ebs_disk.stdout != ""
+
+- name: Format data disk with ext4
+  command: "mkfs.ext4 -m 0 -F {{ detected_ebs_disk.stdout }}"
+  when:
+    - detected_ebs_disk.stdout != ""
+    - ebs_disk_fs.stdout == ""
+
+- name: Ensure target mount directory exists
+  file:
+    path: "{{ target_mount_dir }}"
+    state: directory
+    owner: "{{ mount_owner | default('ubuntu') }}"
+    group: "{{ mount_group | default('docker') }}"
+    mode: "{{ mount_mode | default('0755') }}"
+
+- name: Mount data disk to target directory
+  mount:
+    path: "{{ target_mount_dir }}"
+    src: "{{ detected_ebs_disk.stdout }}"
+    fstype: ext4
+    opts: defaults,noatime,nofail
+    state: mounted
+  when: detected_ebs_disk.stdout != ""
+
+- name: Set permissions on mount directory
+  file:
+    path: "{{ target_mount_dir }}"
+    state: directory
+    owner: "{{ mount_owner | default('ubuntu') }}"
+    group: "{{ mount_group | default('docker') }}"
+    mode: "{{ mount_mode | default('0755') }}"

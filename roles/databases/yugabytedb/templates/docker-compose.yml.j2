@@ -12,6 +12,9 @@ services:
       --ysql_port={{ yugabyte_port_ysql }}
       --ycql_port={{ yugabyte_port_ycql }}
       --base_dir=/var/lib/yugabyte
+      {% if groups['yugabytedb_nodes'] | length > 1 and inventory_hostname != groups['yugabytedb_nodes'][0] %}
+      --join={{ groups['yugabytedb_nodes'][0] }}
+      {% endif %}
     volumes:
       - {{ yugabyte_data_dir }}:/var/lib/yugabyte
     network_mode: "host"
