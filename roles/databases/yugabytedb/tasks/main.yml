@@ -27,3 +27,10 @@
     chdir: "{{ yugabyte_compose_dir }}"
   register: compose_output
   changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"
+
+- name: Wait for Yugabyte to be ready
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ yugabyte_port_tserver_web }}"
+    delay: 10
+    timeout: 90

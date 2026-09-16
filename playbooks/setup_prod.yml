@@ -32,6 +32,7 @@
 
 - name: Setup YugabyteDB
   hosts: yugabytedb_nodes
+  serial: 1
   become: true
   roles:
     - role: databases/yugabytedb

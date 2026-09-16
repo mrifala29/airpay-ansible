@@ -3,12 +3,12 @@
 yugabyte_version: "2.20.1.3-b3"
 
 # Network
-yugabyte_port_master_rpc: 7002
-yugabyte_port_master_web: 7100
-yugabyte_port_tserver_rpc: 9002
-yugabyte_port_tserver_web: 9100
-yugabyte_port_ysql: 5435
-yugabyte_port_ycql: 9043
+yugabyte_port_master_rpc: 7100
+yugabyte_port_master_web: 7000
+yugabyte_port_tserver_rpc: 9100
+yugabyte_port_tserver_web: 9000
+yugabyte_port_ysql: 5433
+yugabyte_port_ycql: 9042
 
 # Paths
 yugabyte_data_dir: "/opt/airpay/yugabyte/data"

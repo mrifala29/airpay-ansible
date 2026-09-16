@@ -3,11 +3,7 @@ services:
     image: scylladb/scylla:{{ scylla_version }}
     container_name: airpay-scylla
     restart: unless-stopped
-    command: >
-      --cluster-name {{ scylla_cluster_name }}
-      {% if scylla_seeds != '' %}
-      --seeds {{ scylla_seeds }}
-      {% endif %}
+    command: "--cluster-name {{ scylla_cluster_name }} --seeds {{ scylla_seeds }}"
     volumes:
       - {{ scylla_data_dir }}:/var/lib/scylla
     network_mode: "host"

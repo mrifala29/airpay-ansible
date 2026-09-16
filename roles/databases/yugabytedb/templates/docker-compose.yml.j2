@@ -3,18 +3,21 @@ services:
     image: yugabytedb/yugabyte:{{ yugabyte_version }}
     container_name: airpay-yugabyte
     restart: unless-stopped
-    command: >
-      bin/yugabyted start --daemon=false
-      --master_rpc_port={{ yugabyte_port_master_rpc }}
-      --master_webserver_port={{ yugabyte_port_master_web }}
-      --tserver_rpc_port={{ yugabyte_port_tserver_rpc }}
-      --tserver_webserver_port={{ yugabyte_port_tserver_web }}
-      --ysql_port={{ yugabyte_port_ysql }}
-      --ycql_port={{ yugabyte_port_ycql }}
-      --base_dir=/var/lib/yugabyte
-      {% if groups['yugabytedb_nodes'] | length > 1 and inventory_hostname != groups['yugabytedb_nodes'][0] %}
-      --join={{ groups['yugabytedb_nodes'][0] }}
-      {% endif %}
+    command:
+      - bin/yugabyted
+      - start
+      - --daemon=false
+      - --advertise_address={{ inventory_hostname }}
+      - --master_rpc_port={{ yugabyte_port_master_rpc }}
+      - --master_webserver_port={{ yugabyte_port_master_web }}
+      - --tserver_rpc_port={{ yugabyte_port_tserver_rpc }}
+      - --tserver_webserver_port={{ yugabyte_port_tserver_web }}
+      - --ysql_port={{ yugabyte_port_ysql }}
+      - --ycql_port={{ yugabyte_port_ycql }}
+      - --base_dir=/var/lib/yugabyte
+{% if groups['yugabytedb_nodes'] | length > 1 and inventory_hostname != groups['yugabytedb_nodes'][0] %}
+      - --join={{ groups['yugabytedb_nodes'][0] }}
+{% endif %}
     volumes:
       - {{ yugabyte_data_dir }}:/var/lib/yugabyte
     network_mode: "host"
