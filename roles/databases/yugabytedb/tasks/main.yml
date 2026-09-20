@@ -33,4 +33,4 @@
     host: "{{ inventory_hostname }}"
     port: "{{ yugabyte_port_tserver_web }}"
     delay: 10
-    timeout: 90
+    timeout: 240
