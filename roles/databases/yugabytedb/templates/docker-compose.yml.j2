@@ -3,21 +3,19 @@ services:
     image: yugabytedb/yugabyte:{{ yugabyte_version }}
     container_name: airpay-yugabyte
     restart: unless-stopped
-    command:
-      - bin/yugabyted
-      - start
-      - --daemon=false
-      - --advertise_address={{ inventory_hostname }}
-      - --master_rpc_port={{ yugabyte_port_master_rpc }}
-      - --master_webserver_port={{ yugabyte_port_master_web }}
-      - --tserver_rpc_port={{ yugabyte_port_tserver_rpc }}
-      - --tserver_webserver_port={{ yugabyte_port_tserver_web }}
-      - --ysql_port={{ yugabyte_port_ysql }}
-      - --ycql_port={{ yugabyte_port_ycql }}
-      - --base_dir=/var/lib/yugabyte
+    entrypoint:
+      - bash
+      - -c
+      - |
+        if [ -f /var/lib/yugabyte/conf/yugabyted.conf ]; then
+          exec bin/yugabyted start --daemon=false --advertise_address={{ inventory_hostname }} --master_rpc_port={{ yugabyte_port_master_rpc }} --master_webserver_port={{ yugabyte_port_master_web }} --tserver_rpc_port={{ yugabyte_port_tserver_rpc }} --tserver_webserver_port={{ yugabyte_port_tserver_web }} --ysql_port={{ yugabyte_port_ysql }} --ycql_port={{ yugabyte_port_ycql }} --base_dir=/var/lib/yugabyte
+        else
 {% if groups['yugabytedb_nodes'] | length > 1 and inventory_hostname != groups['yugabytedb_nodes'][0] %}
-      - --join={{ groups['yugabytedb_nodes'][0] }}
+          exec bin/yugabyted start --daemon=false --advertise_address={{ inventory_hostname }} --master_rpc_port={{ yugabyte_port_master_rpc }} --master_webserver_port={{ yugabyte_port_master_web }} --tserver_rpc_port={{ yugabyte_port_tserver_rpc }} --tserver_webserver_port={{ yugabyte_port_tserver_web }} --ysql_port={{ yugabyte_port_ysql }} --ycql_port={{ yugabyte_port_ycql }} --base_dir=/var/lib/yugabyte --join={{ groups['yugabytedb_nodes'][0] }}
+{% else %}
+          exec bin/yugabyted start --daemon=false --advertise_address={{ inventory_hostname }} --master_rpc_port={{ yugabyte_port_master_rpc }} --master_webserver_port={{ yugabyte_port_master_web }} --tserver_rpc_port={{ yugabyte_port_tserver_rpc }} --tserver_webserver_port={{ yugabyte_port_tserver_web }} --ysql_port={{ yugabyte_port_ysql }} --ycql_port={{ yugabyte_port_ycql }} --base_dir=/var/lib/yugabyte
 {% endif %}
+        fi
     volumes:
       - {{ yugabyte_data_dir }}:/var/lib/yugabyte
     network_mode: "host"

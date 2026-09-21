@@ -19,7 +19,6 @@
     src: docker-compose.yml.j2
     dest: "{{ yugabyte_compose_dir }}/docker-compose.yml"
     mode: '0644'
-  notify: Restart Yugabyte
 
 - name: Start Yugabyte
   command: docker compose up -d
