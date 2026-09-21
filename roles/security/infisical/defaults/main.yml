@@ -9,10 +9,10 @@ infisical_port_db: 5434
 
 # Credentials
 infisical_db_user: "infisical"
-infisical_db_pass: "infisical_db_strong_password"
+infisical_db_pass: "{{ lookup('env', 'INFISICAL_DB_PASSWORD') | default('infisical_db_strong_password', true) }}"
 infisical_db_name: "infisical"
-infisical_auth_secret: "super_secret_auth_key"
-infisical_encryption_key: "super_secret_encryption_key"
+infisical_auth_secret: "{{ lookup('env', 'INFISICAL_AUTH_SECRET') | default('super_secret_auth_key', true) }}"
+infisical_encryption_key: "{{ lookup('env', 'INFISICAL_ENCRYPTION_KEY') | default('super_secret_encryption_key', true) }}"
 
 # Paths
 infisical_data_dir: "/opt/airpay/infisical/data"

@@ -6,7 +6,7 @@ redis_version: "7.2.4-alpine"
 redis_port: 6379
 
 # Credentials
-redis_password: "redis_strong_password_change_me"
+redis_password: "{{ lookup('env', 'REDIS_PASSWORD') | default('redis_strong_password_change_me', true) }}"
 
 # Paths
 redis_data_dir: "/opt/airpay/redis/data"

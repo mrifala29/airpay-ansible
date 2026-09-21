@@ -8,10 +8,10 @@ keycloak_port: 8080
 
 # Credentials
 keycloak_admin_user: "admin"
-keycloak_admin_password: "kc_strong_password"
+keycloak_admin_password: "{{ lookup('env', 'KEYCLOAK_ADMIN_PASSWORD') | default('kc_strong_password', true) }}"
 keycloak_db_name: "keycloak"
 keycloak_db_user: "keycloak"
-keycloak_db_password: "kc_db_strong_password"
+keycloak_db_password: "{{ lookup('env', 'KEYCLOAK_DB_PASSWORD') | default('kc_db_strong_password', true) }}"
 
 # Command
 keycloak_command: "start-dev"

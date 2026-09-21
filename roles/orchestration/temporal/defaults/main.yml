@@ -11,7 +11,7 @@ temporal_port_db: 5433
 
 # Credentials
 temporal_db_user: "temporal"
-temporal_db_pass: "temporal_db_strong_password"
+temporal_db_pass: "{{ lookup('env', 'TEMPORAL_DB_PASSWORD') | default('temporal_db_strong_password', true) }}"
 temporal_db_name: "temporal"
 
 # Paths

@@ -7,7 +7,7 @@ grafana_port: 3000
 
 # Credentials
 grafana_admin_user: "admin"
-grafana_admin_password: "grafana_strong_password"
+grafana_admin_password: "{{ lookup('env', 'GRAFANA_ADMIN_PASSWORD') | default('grafana_strong_password', true) }}"
 
 # Paths
 grafana_data_dir: "/opt/airpay/grafana/data"
