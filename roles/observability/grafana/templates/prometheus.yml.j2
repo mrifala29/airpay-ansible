@@ -21,144 +21,96 @@ scrape_configs:
 
   - job_name: 'gateway'
     static_configs:
-      - targets: ['10.0.11.163:9100']
+{% if eks_nodes is defined and eks_nodes.gateway is defined %}
+{% for node in eks_nodes.gateway %}
+      - targets: ['{{ node.ip }}:9100']
         labels:
-          server_name: 'gateway-node-01 (AZ-a)'
+          server_name: 'gateway-node-0{{ loop.index }} (AZ-{{ ["a","b","c"][loop.index0] }})'
           service: 'APISIX Ingress Gateway'
           category: 'API Gateway & Ingress'
           environment: 'prod'
-      - targets: ['10.0.12.42:9100']
-        labels:
-          server_name: 'gateway-node-02 (AZ-b)'
-          service: 'APISIX Ingress Gateway'
-          category: 'API Gateway & Ingress'
-          environment: 'prod'
-      - targets: ['10.0.13.12:9100']
-        labels:
-          server_name: 'gateway-node-03 (AZ-c)'
-          service: 'APISIX Ingress Gateway'
-          category: 'API Gateway & Ingress'
-          environment: 'prod'
+{% endfor %}
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
 
   - job_name: 'integration'
     static_configs:
-      - targets: ['10.0.11.40:9100']
+{% if eks_nodes is defined and eks_nodes.integration is defined %}
+{% for node in eks_nodes.integration %}
+      - targets: ['{{ node.ip }}:9100']
         labels:
-          server_name: 'integration-node-01 (AZ-a)'
+          server_name: 'integration-node-0{{ loop.index }} (AZ-{{ ["a","b","c"][loop.index0] }})'
           service: 'Microservices (KSA, COD, Cloud7)'
           category: 'Microservices Integrations'
           environment: 'prod'
-      - targets: ['10.0.12.44:9100']
-        labels:
-          server_name: 'integration-node-02 (AZ-b)'
-          service: 'Microservices (KSA, COD, Cloud7)'
-          category: 'Microservices Integrations'
-          environment: 'prod'
-      - targets: ['10.0.13.190:9100']
-        labels:
-          server_name: 'integration-node-03 (AZ-c)'
-          service: 'Microservices (KSA, COD, Cloud7)'
-          category: 'Microservices Integrations'
-          environment: 'prod'
+{% endfor %}
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
 
   - job_name: 'application'
     static_configs:
-      - targets: ['10.0.11.244:9100']
+{% if eks_nodes is defined and eks_nodes.application is defined %}
+{% for node in eks_nodes.application %}
+      - targets: ['{{ node.ip }}:9100']
         labels:
-          server_name: 'application-node-01 (AZ-a)'
+          server_name: 'application-node-0{{ loop.index }} (AZ-{{ ["a","b","c"][loop.index0] }})'
           service: 'Data Governance Core'
           category: 'Core Applications'
           environment: 'prod'
-      - targets: ['10.0.12.40:9100']
-        labels:
-          server_name: 'application-node-02 (AZ-b)'
-          service: 'Data Governance Core'
-          category: 'Core Applications'
-          environment: 'prod'
-      - targets: ['10.0.13.88:9100']
-        labels:
-          server_name: 'application-node-03 (AZ-c)'
-          service: 'Data Governance Core'
-          category: 'Core Applications'
-          environment: 'prod'
+{% endfor %}
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
 
   - job_name: 'cache'
     static_configs:
-      - targets: ['10.0.11.113:9100']
+{% if eks_nodes is defined and eks_nodes.cache is defined %}
+{% for node in eks_nodes.cache %}
+      - targets: ['{{ node.ip }}:9100']
         labels:
-          server_name: 'cache-aerospike-01 (AZ-a)'
+          server_name: 'cache-aerospike-0{{ loop.index }} (AZ-{{ ["a","b","c"][loop.index0] }})'
           service: 'Aerospike Cache'
           category: 'Distributed In-Memory Cache'
           environment: 'prod'
-      - targets: ['10.0.12.120:9100']
-        labels:
-          server_name: 'cache-aerospike-02 (AZ-b)'
-          service: 'Aerospike Cache'
-          category: 'Distributed In-Memory Cache'
-          environment: 'prod'
-      - targets: ['10.0.13.54:9100']
-        labels:
-          server_name: 'cache-aerospike-03 (AZ-c)'
-          service: 'Aerospike Cache'
-          category: 'Distributed In-Memory Cache'
-          environment: 'prod'
+{% endfor %}
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
 
   - job_name: 'messaging'
     static_configs:
-      - targets: ['10.0.11.100:9100']
+{% if eks_nodes is defined and eks_nodes.messaging is defined %}
+{% for node in eks_nodes.messaging %}
+      - targets: ['{{ node.ip }}:9100']
         labels:
-          server_name: 'messaging-kafka-01 (AZ-a)'
+          server_name: 'messaging-kafka-0{{ loop.index }} (AZ-{{ ["a","b","c"][loop.index0] }})'
           service: 'Kafka & Temporal'
           category: 'Event Streaming & Workflows'
           environment: 'prod'
-      - targets: ['10.0.12.168:9100']
-        labels:
-          server_name: 'messaging-kafka-02 (AZ-b)'
-          service: 'Kafka & Temporal'
-          category: 'Event Streaming & Workflows'
-          environment: 'prod'
-      - targets: ['10.0.13.237:9100']
-        labels:
-          server_name: 'messaging-kafka-03 (AZ-c)'
-          service: 'Kafka & Temporal'
-          category: 'Event Streaming & Workflows'
-          environment: 'prod'
+{% endfor %}
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
 
   - job_name: 'system'
     static_configs:
-      - targets: ['10.0.11.253:9100']
+{% if eks_nodes is defined and eks_nodes.system is defined %}
+{% for node in eks_nodes.system %}
+      - targets: ['{{ node.ip }}:9100']
         labels:
-          server_name: 'system-platform-01 (AZ-a)'
+          server_name: 'system-platform-0{{ loop.index }} (AZ-{{ ["a","b","c"][loop.index0] }})'
           service: 'ArgoCD, Keycloak, Infisical'
           category: 'Platform & Management'
           environment: 'prod'
-      - targets: ['10.0.12.193:9100']
-        labels:
-          server_name: 'system-platform-02 (AZ-b)'
-          service: 'ArgoCD, Keycloak, Infisical'
-          category: 'Platform & Management'
-          environment: 'prod'
-      - targets: ['10.0.13.24:9100']
-        labels:
-          server_name: 'system-platform-03 (AZ-c)'
-          service: 'ArgoCD, Keycloak, Infisical'
-          category: 'Platform & Management'
-          environment: 'prod'
+{% endfor %}
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
