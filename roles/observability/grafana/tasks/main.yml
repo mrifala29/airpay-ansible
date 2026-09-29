@@ -6,15 +6,21 @@
     mount_owner: "472"
     mount_group: "472"
 
-- name: Create Compose Directory
+- name: Create Observability Directories
   file:
-    path: "{{ grafana_compose_dir }}"
+    path: "{{ item }}"
     state: directory
     mode: '0755'
     owner: ubuntu
     group: docker
+  loop:
+    - "{{ grafana_compose_dir }}"
+    - "{{ grafana_compose_dir }}/provisioning/datasources"
+    - "{{ grafana_compose_dir }}/provisioning/dashboards"
+    - "{{ grafana_compose_dir }}/provisioning/dashboards/json"
+    - "{{ grafana_compose_dir }}/targets"
 
-- name: Ensure Data Directory Permissions
+- name: Ensure Grafana Data Directory Permissions
   file:
     path: "{{ grafana_data_dir }}"
     state: directory
@@ -22,14 +28,47 @@
     owner: "472"
     group: "472"
 
+- name: Ensure Prometheus Data Directory Permissions
+  file:
+    path: "{{ prometheus_data_dir }}"
+    state: directory
+    mode: '0755'
+    owner: "65534"
+    group: "65534"
+
+- name: Template Prometheus Configuration
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ grafana_compose_dir }}/prometheus.yml"
+    mode: '0644'
+
+- name: Template Grafana Datasources
+  template:
+    src: datasources.yaml.j2
+    dest: "{{ grafana_compose_dir }}/provisioning/datasources/datasources.yaml"
+    mode: '0644'
+
+- name: Template Grafana Dashboards Provider
+  template:
+    src: dashboards.yaml.j2
+    dest: "{{ grafana_compose_dir }}/provisioning/dashboards/dashboards.yaml"
+    mode: '0644'
+
+- name: Copy Grafana Server Monitoring Dashboard
+  copy:
+    src: dashboard-server-monitoring.json
+    dest: "{{ grafana_compose_dir }}/provisioning/dashboards/json/dashboard-server-monitoring.json"
+    mode: '0644'
+
 - name: Template Compose
+
   template:
     src: docker-compose.yml.j2
     dest: "{{ grafana_compose_dir }}/docker-compose.yml"
     mode: '0644'
   notify: Restart Grafana
 
-- name: Start Grafana
+- name: Start Grafana & Prometheus
   command: docker compose up -d
   args:
     chdir: "{{ grafana_compose_dir }}"

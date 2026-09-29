@@ -7,6 +7,24 @@ services:
       GF_SECURITY_ADMIN_USER: {{ grafana_admin_user }}
       GF_SECURITY_ADMIN_PASSWORD: {{ grafana_admin_password }}
       GF_SERVER_HTTP_PORT: {{ grafana_port }}
+      GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - {{ grafana_data_dir }}:/var/lib/grafana
+      - {{ grafana_compose_dir }}/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - {{ grafana_compose_dir }}/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
     network_mode: "host"
+
+  prometheus:
+    image: prom/prometheus:{{ prometheus_version }}
+    container_name: airpay-prometheus
+    restart: unless-stopped
+    network_mode: "host"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.listen-address=0.0.0.0:{{ prometheus_port }}'
+    volumes:
+      - {{ grafana_compose_dir }}/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - {{ grafana_compose_dir }}/targets:/etc/prometheus/targets:ro
+      - {{ prometheus_data_dir }}:/prometheus

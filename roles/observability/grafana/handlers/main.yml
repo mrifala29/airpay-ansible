@@ -1,5 +1,5 @@
 ---
 - name: Restart Grafana
-  command: docker compose restart
+  command: docker compose up -d --remove-orphans
   args:
     chdir: "{{ grafana_compose_dir }}"

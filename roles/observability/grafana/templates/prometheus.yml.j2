@@ -1,0 +1,75 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['127.0.0.1:9090']
+
+  - job_name: 'monitoring_server'
+    static_configs:
+      - targets: ['127.0.0.1:9100']
+        labels:
+          role: 'monitoring'
+          environment: 'prod'
+
+  - job_name: 'scylladb'
+    static_configs:
+      - targets:
+{% for host in groups['scylladb_nodes'] %}
+          - '{{ host }}:9100'
+{% endfor %}
+        labels:
+          role: 'scylladb'
+          environment: 'prod'
+
+  - job_name: 'clickhouse'
+    static_configs:
+      - targets:
+{% for host in groups['clickhouse_nodes'] %}
+          - '{{ host }}:9100'
+{% endfor %}
+        labels:
+          role: 'clickhouse'
+          environment: 'prod'
+
+  - job_name: 'yugabytedb'
+    static_configs:
+      - targets:
+{% for host in groups['yugabytedb_nodes'] %}
+          - '{{ host }}:9101'
+{% endfor %}
+
+        labels:
+          role: 'yugabytedb'
+          environment: 'prod'
+
+  - job_name: 'eks_nodes'
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/targets/eks_nodes.json'
+        refresh_interval: 30s
+    static_configs:
+      - targets:
+          - '10.0.11.40:9100'
+          - '10.0.11.100:9100'
+          - '10.0.11.113:9100'
+          - '10.0.11.163:9100'
+          - '10.0.11.244:9100'
+          - '10.0.11.253:9100'
+          - '10.0.12.40:9100'
+          - '10.0.12.42:9100'
+          - '10.0.12.44:9100'
+          - '10.0.12.120:9100'
+          - '10.0.12.168:9100'
+          - '10.0.12.193:9100'
+          - '10.0.13.12:9100'
+          - '10.0.13.24:9100'
+          - '10.0.13.54:9100'
+          - '10.0.13.88:9100'
+          - '10.0.13.190:9100'
+          - '10.0.13.237:9100'
+        labels:
+          role: 'eks-worker'
+          environment: 'prod'

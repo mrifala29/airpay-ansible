@@ -93,3 +93,11 @@
   roles:
     - role: observability/grafana
       tags: ['observability', 'grafana']
+
+- name: Setup Node Exporter on all EC2 hosts
+  hosts: airpay_nodes
+  become: true
+  roles:
+    - role: observability/node_exporter
+      tags: ['observability', 'node_exporter']
+
