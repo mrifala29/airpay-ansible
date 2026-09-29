@@ -18,7 +18,7 @@
         "y": 0
       },
       "id": 1,
-      "title": "\ud83d\udea8 Cluster Hotspots (> 75% CPU or RAM)",
+      "title": "\ud83c\udf10 API Gateway & Ingress (APISIX)",
       "type": "row"
     },
     {
@@ -31,6 +31,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -82,14 +83,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "(100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)) > 75",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"gateway\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Nodes with High CPU (> 75%)",
+      "title": "CPU Usage (%) - APISIX Gateway",
       "type": "gauge"
     },
     {
@@ -102,6 +103,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -153,14 +155,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "(((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes) * 100) > 80",
+          "expr": "((node_memory_MemTotal_bytes{job=\"gateway\"} - node_memory_MemAvailable_bytes{job=\"gateway\"}) / node_memory_MemTotal_bytes{job=\"gateway\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Nodes with High RAM (> 80%)",
+      "title": "RAM Usage (%) - APISIX Gateway",
       "type": "gauge"
     },
     {
@@ -172,7 +174,7 @@
         "y": 7
       },
       "id": 4,
-      "title": "\ud83c\udf10 API Gateway & Ingress (APISIX)",
+      "title": "\ud83d\udcf1 Telco & Microservices Integrations (KSA STC, COD, Cloud7)",
       "type": "row"
     },
     {
@@ -185,6 +187,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -236,14 +239,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"gateway\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"integration\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - APISIX Gateway",
+      "title": "CPU Usage (%) - Microservices Integration",
       "type": "gauge"
     },
     {
@@ -256,6 +259,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -307,14 +311,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"gateway\"} - node_memory_MemAvailable_bytes{job=\"gateway\"}) / node_memory_MemTotal_bytes{job=\"gateway\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"integration\"} - node_memory_MemAvailable_bytes{job=\"integration\"}) / node_memory_MemTotal_bytes{job=\"integration\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - APISIX Gateway",
+      "title": "RAM Usage (%) - Microservices Integration",
       "type": "gauge"
     },
     {
@@ -326,7 +330,7 @@
         "y": 14
       },
       "id": 7,
-      "title": "\ud83d\udcf1 Telco & Microservices Integrations (KSA STC, COD, Cloud7)",
+      "title": "\u2699\ufe0f Core Applications (Data Governance)",
       "type": "row"
     },
     {
@@ -339,6 +343,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -390,14 +395,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"integration\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"application\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - Microservices Integration",
+      "title": "CPU Usage (%) - Data Governance Core",
       "type": "gauge"
     },
     {
@@ -410,6 +415,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -461,14 +467,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"integration\"} - node_memory_MemAvailable_bytes{job=\"integration\"}) / node_memory_MemTotal_bytes{job=\"integration\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"application\"} - node_memory_MemAvailable_bytes{job=\"application\"}) / node_memory_MemTotal_bytes{job=\"application\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - Microservices Integration",
+      "title": "RAM Usage (%) - Data Governance Core",
       "type": "gauge"
     },
     {
@@ -480,7 +486,7 @@
         "y": 21
       },
       "id": 10,
-      "title": "\u2699\ufe0f Core Applications (Data Governance)",
+      "title": "\u26a1 Distributed Cache (Aerospike)",
       "type": "row"
     },
     {
@@ -493,6 +499,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -544,14 +551,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"application\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"cache\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - Data Governance Core",
+      "title": "CPU Usage (%) - Aerospike Cache",
       "type": "gauge"
     },
     {
@@ -564,6 +571,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -615,14 +623,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"application\"} - node_memory_MemAvailable_bytes{job=\"application\"}) / node_memory_MemTotal_bytes{job=\"application\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"cache\"} - node_memory_MemAvailable_bytes{job=\"cache\"}) / node_memory_MemTotal_bytes{job=\"cache\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - Data Governance Core",
+      "title": "RAM Usage (%) - Aerospike Cache",
       "type": "gauge"
     },
     {
@@ -634,7 +642,7 @@
         "y": 28
       },
       "id": 13,
-      "title": "\u26a1 Distributed Cache (Aerospike)",
+      "title": "\ud83d\udce8 Event Streaming & Workflows (Kafka & Temporal)",
       "type": "row"
     },
     {
@@ -647,6 +655,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -698,14 +707,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"cache\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"messaging\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - Aerospike Cache",
+      "title": "CPU Usage (%) - Kafka & Temporal",
       "type": "gauge"
     },
     {
@@ -718,6 +727,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -769,14 +779,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"cache\"} - node_memory_MemAvailable_bytes{job=\"cache\"}) / node_memory_MemTotal_bytes{job=\"cache\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"messaging\"} - node_memory_MemAvailable_bytes{job=\"messaging\"}) / node_memory_MemTotal_bytes{job=\"messaging\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - Aerospike Cache",
+      "title": "RAM Usage (%) - Kafka & Temporal",
       "type": "gauge"
     },
     {
@@ -788,7 +798,7 @@
         "y": 35
       },
       "id": 16,
-      "title": "\ud83d\udce8 Event Streaming & Workflows (Kafka & Temporal)",
+      "title": "\ud83d\udee1\ufe0f Platform & Identity (ArgoCD, Keycloak, Infisical)",
       "type": "row"
     },
     {
@@ -801,6 +811,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -852,14 +863,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"messaging\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"system\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - Kafka & Temporal",
+      "title": "CPU Usage (%) - Platform Management",
       "type": "gauge"
     },
     {
@@ -872,6 +883,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -923,14 +935,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"messaging\"} - node_memory_MemAvailable_bytes{job=\"messaging\"}) / node_memory_MemTotal_bytes{job=\"messaging\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"system\"} - node_memory_MemAvailable_bytes{job=\"system\"}) / node_memory_MemTotal_bytes{job=\"system\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - Kafka & Temporal",
+      "title": "RAM Usage (%) - Platform Management",
       "type": "gauge"
     },
     {
@@ -942,7 +954,7 @@
         "y": 42
       },
       "id": 19,
-      "title": "\ud83d\udee1\ufe0f Platform & Identity (ArgoCD, Keycloak, Infisical)",
+      "title": "\ud83c\udf43 Database: ScyllaDB Cluster (Distributed NoSQL)",
       "type": "row"
     },
     {
@@ -955,6 +967,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1006,14 +1019,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"system\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"scylladb\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - Platform Management",
+      "title": "CPU Usage (%) - ScyllaDB",
       "type": "gauge"
     },
     {
@@ -1026,6 +1039,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1077,14 +1091,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"system\"} - node_memory_MemAvailable_bytes{job=\"system\"}) / node_memory_MemTotal_bytes{job=\"system\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"scylladb\"} - node_memory_MemAvailable_bytes{job=\"scylladb\"}) / node_memory_MemTotal_bytes{job=\"scylladb\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - Platform Management",
+      "title": "RAM Usage (%) - ScyllaDB",
       "type": "gauge"
     },
     {
@@ -1096,7 +1110,7 @@
         "y": 49
       },
       "id": 22,
-      "title": "\ud83c\udf43 Database: ScyllaDB Cluster (Distributed NoSQL)",
+      "title": "\ud83d\udcca Database: ClickHouse Cluster (Analytics OLAP)",
       "type": "row"
     },
     {
@@ -1109,6 +1123,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1160,14 +1175,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"scylladb\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"clickhouse\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - ScyllaDB",
+      "title": "CPU Usage (%) - ClickHouse",
       "type": "gauge"
     },
     {
@@ -1180,6 +1195,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1231,14 +1247,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"scylladb\"} - node_memory_MemAvailable_bytes{job=\"scylladb\"}) / node_memory_MemTotal_bytes{job=\"scylladb\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"clickhouse\"} - node_memory_MemAvailable_bytes{job=\"clickhouse\"}) / node_memory_MemTotal_bytes{job=\"clickhouse\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - ScyllaDB",
+      "title": "RAM Usage (%) - ClickHouse",
       "type": "gauge"
     },
     {
@@ -1250,7 +1266,7 @@
         "y": 56
       },
       "id": 25,
-      "title": "\ud83d\udcca Database: ClickHouse Cluster (Analytics OLAP)",
+      "title": "\ud83d\udc18 Database: YugabyteDB Cluster (Distributed SQL)",
       "type": "row"
     },
     {
@@ -1263,6 +1279,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1314,14 +1331,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"clickhouse\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"yugabytedb\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - ClickHouse",
+      "title": "CPU Usage (%) - YugabyteDB",
       "type": "gauge"
     },
     {
@@ -1334,6 +1351,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1385,14 +1403,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"clickhouse\"} - node_memory_MemAvailable_bytes{job=\"clickhouse\"}) / node_memory_MemTotal_bytes{job=\"clickhouse\"}) * 100",
+          "expr": "((node_memory_MemTotal_bytes{job=\"yugabytedb\"} - node_memory_MemAvailable_bytes{job=\"yugabytedb\"}) / node_memory_MemTotal_bytes{job=\"yugabytedb\"}) * 100",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "RAM Usage (%) - ClickHouse",
+      "title": "RAM Usage (%) - YugabyteDB",
       "type": "gauge"
     },
     {
@@ -1404,7 +1422,7 @@
         "y": 63
       },
       "id": 28,
-      "title": "\ud83d\udc18 Database: YugabyteDB Cluster (Distributed SQL)",
+      "title": "\ud83d\udda5\ufe0f Observability Host (Grafana & Prometheus)",
       "type": "row"
     },
     {
@@ -1417,6 +1435,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1468,14 +1487,14 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"yugabytedb\"}[1m])) * 100)",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"monitoring_server\"}[1m])) * 100)",
           "instant": true,
           "legendFormat": "{{instance}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%) - YugabyteDB",
+      "title": "CPU Usage (%) - Monitoring Server",
       "type": "gauge"
     },
     {
@@ -1488,6 +1507,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "${__field.labels.instance}",
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1519,160 +1539,6 @@
         "y": 64
       },
       "id": 30,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "((node_memory_MemTotal_bytes{job=\"yugabytedb\"} - node_memory_MemAvailable_bytes{job=\"yugabytedb\"}) / node_memory_MemTotal_bytes{job=\"yugabytedb\"}) * 100",
-          "instant": true,
-          "legendFormat": "{{instance}}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "RAM Usage (%) - YugabyteDB",
-      "type": "gauge"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 70
-      },
-      "id": 31,
-      "title": "\ud83d\udda5\ufe0f Observability Host (Grafana & Prometheus)",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "max": 100,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 70
-              },
-              {
-                "color": "red",
-                "value": 85
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 71
-      },
-      "id": 32,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\", job=\"monitoring_server\"}[1m])) * 100)",
-          "instant": true,
-          "legendFormat": "{{instance}}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "CPU Usage (%) - Monitoring Server",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "max": 100,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 75
-              },
-              {
-                "color": "red",
-                "value": 90
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 71
-      },
-      "id": 33,
       "options": {
         "orientation": "auto",
         "reduceOptions": {
@@ -1730,5 +1596,5 @@
   "timezone": "browser",
   "title": "Airpay Services & Microservices - Resource Gauges",
   "uid": "airpay-server-monitoring",
-  "version": 2
+  "version": 4
 }
