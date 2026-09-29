@@ -24,6 +24,7 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention.time=15d'
       - '--web.listen-address=0.0.0.0:{{ prometheus_port }}'
+      - '--web.enable-lifecycle'
     volumes:
       - {{ grafana_compose_dir }}/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - {{ grafana_compose_dir }}/targets:/etc/prometheus/targets:ro

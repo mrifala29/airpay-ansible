@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 10s
+  evaluation_interval: 10s
 
 scrape_configs:
   - job_name: 'prometheus'
@@ -11,65 +11,196 @@ scrape_configs:
     static_configs:
       - targets: ['127.0.0.1:9100']
         labels:
-          role: 'monitoring'
+          server_name: 'monitoring-grafana'
+          service: 'Monitoring & Observability'
+          category: 'Observability'
           environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'gateway'
+    static_configs:
+      - targets: ['10.0.11.163:9100']
+        labels:
+          server_name: 'gateway-node-01 (AZ-a)'
+          service: 'APISIX Ingress Gateway'
+          category: 'API Gateway & Ingress'
+          environment: 'prod'
+      - targets: ['10.0.12.42:9100']
+        labels:
+          server_name: 'gateway-node-02 (AZ-b)'
+          service: 'APISIX Ingress Gateway'
+          category: 'API Gateway & Ingress'
+          environment: 'prod'
+      - targets: ['10.0.13.12:9100']
+        labels:
+          server_name: 'gateway-node-03 (AZ-c)'
+          service: 'APISIX Ingress Gateway'
+          category: 'API Gateway & Ingress'
+          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'integration'
+    static_configs:
+      - targets: ['10.0.11.40:9100']
+        labels:
+          server_name: 'integration-node-01 (AZ-a)'
+          service: 'Microservices (KSA, COD, Cloud7)'
+          category: 'Microservices Integrations'
+          environment: 'prod'
+      - targets: ['10.0.12.44:9100']
+        labels:
+          server_name: 'integration-node-02 (AZ-b)'
+          service: 'Microservices (KSA, COD, Cloud7)'
+          category: 'Microservices Integrations'
+          environment: 'prod'
+      - targets: ['10.0.13.190:9100']
+        labels:
+          server_name: 'integration-node-03 (AZ-c)'
+          service: 'Microservices (KSA, COD, Cloud7)'
+          category: 'Microservices Integrations'
+          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'application'
+    static_configs:
+      - targets: ['10.0.11.244:9100']
+        labels:
+          server_name: 'application-node-01 (AZ-a)'
+          service: 'Data Governance Core'
+          category: 'Core Applications'
+          environment: 'prod'
+      - targets: ['10.0.12.40:9100']
+        labels:
+          server_name: 'application-node-02 (AZ-b)'
+          service: 'Data Governance Core'
+          category: 'Core Applications'
+          environment: 'prod'
+      - targets: ['10.0.13.88:9100']
+        labels:
+          server_name: 'application-node-03 (AZ-c)'
+          service: 'Data Governance Core'
+          category: 'Core Applications'
+          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'cache'
+    static_configs:
+      - targets: ['10.0.11.113:9100']
+        labels:
+          server_name: 'cache-aerospike-01 (AZ-a)'
+          service: 'Aerospike Cache'
+          category: 'Distributed In-Memory Cache'
+          environment: 'prod'
+      - targets: ['10.0.12.120:9100']
+        labels:
+          server_name: 'cache-aerospike-02 (AZ-b)'
+          service: 'Aerospike Cache'
+          category: 'Distributed In-Memory Cache'
+          environment: 'prod'
+      - targets: ['10.0.13.54:9100']
+        labels:
+          server_name: 'cache-aerospike-03 (AZ-c)'
+          service: 'Aerospike Cache'
+          category: 'Distributed In-Memory Cache'
+          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'messaging'
+    static_configs:
+      - targets: ['10.0.11.100:9100']
+        labels:
+          server_name: 'messaging-kafka-01 (AZ-a)'
+          service: 'Kafka & Temporal'
+          category: 'Event Streaming & Workflows'
+          environment: 'prod'
+      - targets: ['10.0.12.168:9100']
+        labels:
+          server_name: 'messaging-kafka-02 (AZ-b)'
+          service: 'Kafka & Temporal'
+          category: 'Event Streaming & Workflows'
+          environment: 'prod'
+      - targets: ['10.0.13.237:9100']
+        labels:
+          server_name: 'messaging-kafka-03 (AZ-c)'
+          service: 'Kafka & Temporal'
+          category: 'Event Streaming & Workflows'
+          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'system'
+    static_configs:
+      - targets: ['10.0.11.253:9100']
+        labels:
+          server_name: 'system-platform-01 (AZ-a)'
+          service: 'ArgoCD, Keycloak, Infisical'
+          category: 'Platform & Management'
+          environment: 'prod'
+      - targets: ['10.0.12.193:9100']
+        labels:
+          server_name: 'system-platform-02 (AZ-b)'
+          service: 'ArgoCD, Keycloak, Infisical'
+          category: 'Platform & Management'
+          environment: 'prod'
+      - targets: ['10.0.13.24:9100']
+        labels:
+          server_name: 'system-platform-03 (AZ-c)'
+          service: 'ArgoCD, Keycloak, Infisical'
+          category: 'Platform & Management'
+          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
 
   - job_name: 'scylladb'
     static_configs:
-      - targets:
 {% for host in groups['scylladb_nodes'] %}
-          - '{{ host }}:9100'
-{% endfor %}
+      - targets: ['{{ host }}:9100']
         labels:
-          role: 'scylladb'
+          server_name: 'scylladb-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'ScyllaDB Cluster'
+          category: 'Database - ScyllaDB'
           environment: 'prod'
+{% endfor %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
 
   - job_name: 'clickhouse'
     static_configs:
-      - targets:
 {% for host in groups['clickhouse_nodes'] %}
-          - '{{ host }}:9100'
-{% endfor %}
+      - targets: ['{{ host }}:9100']
         labels:
-          role: 'clickhouse'
+          server_name: 'clickhouse-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'ClickHouse OLAP'
+          category: 'Database - ClickHouse'
           environment: 'prod'
+{% endfor %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
 
   - job_name: 'yugabytedb'
     static_configs:
-      - targets:
 {% for host in groups['yugabytedb_nodes'] %}
-          - '{{ host }}:9101'
+      - targets: ['{{ host }}:9101']
+        labels:
+          server_name: 'yugabyte-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'YugabyteDB SQL'
+          category: 'Database - YugabyteDB'
+          environment: 'prod'
 {% endfor %}
-
-        labels:
-          role: 'yugabytedb'
-          environment: 'prod'
-
-  - job_name: 'eks_nodes'
-    file_sd_configs:
-      - files:
-          - '/etc/prometheus/targets/eks_nodes.json'
-        refresh_interval: 30s
-    static_configs:
-      - targets:
-          - '10.0.11.40:9100'
-          - '10.0.11.100:9100'
-          - '10.0.11.113:9100'
-          - '10.0.11.163:9100'
-          - '10.0.11.244:9100'
-          - '10.0.11.253:9100'
-          - '10.0.12.40:9100'
-          - '10.0.12.42:9100'
-          - '10.0.12.44:9100'
-          - '10.0.12.120:9100'
-          - '10.0.12.168:9100'
-          - '10.0.12.193:9100'
-          - '10.0.13.12:9100'
-          - '10.0.13.24:9100'
-          - '10.0.13.54:9100'
-          - '10.0.13.88:9100'
-          - '10.0.13.190:9100'
-          - '10.0.13.237:9100'
-        labels:
-          role: 'eks-worker'
-          environment: 'prod'
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
