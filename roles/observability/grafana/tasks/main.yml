@@ -41,6 +41,7 @@
     src: prometheus.yml.j2
     dest: "{{ grafana_compose_dir }}/prometheus.yml"
     mode: '0644'
+  notify: Restart Prometheus
 
 - name: Template Grafana Datasources
   template:
@@ -54,11 +55,15 @@
     dest: "{{ grafana_compose_dir }}/provisioning/dashboards/dashboards.yaml"
     mode: '0644'
 
-- name: Copy Grafana Server Monitoring Dashboard
+- name: Copy Grafana Dashboards
   copy:
-    src: dashboard-server-monitoring.json
-    dest: "{{ grafana_compose_dir }}/provisioning/dashboards/json/dashboard-server-monitoring.json"
+    src: "{{ item }}"
+    dest: "{{ grafana_compose_dir }}/provisioning/dashboards/json/{{ item }}"
     mode: '0644'
+  loop:
+    - dashboard-server-monitoring.json
+    - dashboard-database-services.json
+
 
 - name: Template Compose
 

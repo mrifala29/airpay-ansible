@@ -7,7 +7,7 @@
     mount_group: "docker"
     mount_mode: "0777"
 
-- name: Create Compose and Log Directories
+- name: Create Compose, Log, and Config Directories
   file:
     path: "{{ item.path }}"
     state: directory
@@ -18,6 +18,14 @@
     - { path: "{{ clickhouse_compose_dir }}", mode: "0755" }
     - { path: "{{ clickhouse_log_dir }}", mode: "0777" }
     - { path: "{{ clickhouse_data_dir }}", mode: "0777" }
+    - { path: "{{ clickhouse_config_dir }}", mode: "0755" }
+
+- name: Template Prometheus Config
+  template:
+    src: prometheus.xml.j2
+    dest: "{{ clickhouse_config_dir }}/prometheus.xml"
+    mode: '0644'
+  notify: Restart ClickHouse
 
 - name: Template Compose
   template:
@@ -25,6 +33,7 @@
     dest: "{{ clickhouse_compose_dir }}/docker-compose.yml"
     mode: '0644'
   notify: Restart ClickHouse
+
 
 - name: Start ClickHouse
   command: docker compose up -d

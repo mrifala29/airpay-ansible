@@ -7,6 +7,8 @@ scylla_port_cql: 9042
 scylla_port_thrift: 9160
 scylla_port_internode: 7000
 scylla_port_api: 10000
+scylla_port_prometheus: 9180
+
 
 # Settings
 scylla_cluster_name: "airpay-scylla-cluster"

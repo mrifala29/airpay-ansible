@@ -5,6 +5,7 @@ clickhouse_version: "24.3-alpine"
 # Network
 clickhouse_port_http: 8123
 clickhouse_port_tcp: 9000
+clickhouse_port_prometheus: 9363
 
 # Credentials
 clickhouse_user: "default"
@@ -13,4 +14,6 @@ clickhouse_password: "{{ lookup('env', 'CLICKHOUSE_PASSWORD') | default('clickho
 # Paths
 clickhouse_data_dir: "/opt/airpay/clickhouse/data"
 clickhouse_log_dir: "/opt/airpay/clickhouse/log"
+clickhouse_config_dir: "/opt/airpay/clickhouse/config.d"
 clickhouse_compose_dir: "/opt/airpay/clickhouse"
+

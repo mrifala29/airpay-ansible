@@ -3,3 +3,8 @@
   command: docker compose up -d --remove-orphans
   args:
     chdir: "{{ grafana_compose_dir }}"
+
+- name: Restart Prometheus
+  command: docker compose restart prometheus
+  args:
+    chdir: "{{ grafana_compose_dir }}"

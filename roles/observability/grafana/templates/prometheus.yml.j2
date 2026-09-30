@@ -156,3 +156,90 @@ scrape_configs:
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
+
+  # --- SERVICE-LEVEL METRICS ---
+  - job_name: 'scylladb_service'
+    metrics_path: '/metrics'
+    static_configs:
+{% if groups['scylladb_nodes'] is defined and groups['scylladb_nodes'] | length > 0 %}
+{% for host in groups['scylladb_nodes'] %}
+      - targets: ['{{ host }}:9180']
+        labels:
+          server_name: 'scylladb-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'ScyllaDB Service'
+          category: 'Database Service'
+          environment: 'prod'
+{% endfor %}
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'clickhouse_service'
+    metrics_path: '/metrics'
+    static_configs:
+{% if groups['clickhouse_nodes'] is defined and groups['clickhouse_nodes'] | length > 0 %}
+{% for host in groups['clickhouse_nodes'] %}
+      - targets: ['{{ host }}:9363']
+        labels:
+          server_name: 'clickhouse-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'ClickHouse Service'
+          category: 'Database Service'
+          environment: 'prod'
+{% endfor %}
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'yugabytedb_tserver'
+    metrics_path: '/prometheus-metrics'
+    static_configs:
+{% if groups['yugabytedb_nodes'] is defined and groups['yugabytedb_nodes'] | length > 0 %}
+{% for host in groups['yugabytedb_nodes'] %}
+      - targets: ['{{ host }}:9000']
+        labels:
+          server_name: 'yugabyte-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'YugabyteDB TServer'
+          category: 'Database Service'
+          environment: 'prod'
+{% endfor %}
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'yugabytedb_master'
+    metrics_path: '/prometheus-metrics'
+    static_configs:
+{% if groups['yugabytedb_nodes'] is defined and groups['yugabytedb_nodes'] | length > 0 %}
+{% for host in groups['yugabytedb_nodes'] %}
+      - targets: ['{{ host }}:7000']
+        labels:
+          server_name: 'yugabyte-node-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'YugabyteDB Master'
+          category: 'Database Service'
+          environment: 'prod'
+{% endfor %}
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+{% if groups['redis_nodes'] is defined and groups['redis_nodes'] | length > 0 %}
+  - job_name: 'redis_exporter'
+    metrics_path: '/metrics'
+    static_configs:
+{% for host in groups['redis_nodes'] %}
+      - targets: ['{{ host }}:9121']
+        labels:
+          server_name: 'redis-node-0{{ loop.index }}'
+          service: 'Redis Cache'
+          category: 'Cache Service'
+          environment: 'prod'
+{% endfor %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+{% endif %}
+

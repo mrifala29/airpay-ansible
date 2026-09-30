@@ -7,3 +7,13 @@ services:
     network_mode: "host"
     volumes:
       - {{ redis_data_dir }}:/data
+
+  redis-exporter:
+    image: oliver006/redis_exporter:{{ redis_exporter_version }}
+    container_name: airpay-redis-exporter
+    restart: unless-stopped
+    environment:
+      REDIS_ADDR: "redis://localhost:{{ redis_port }}"
+      REDIS_PASSWORD: "{{ redis_password }}"
+    network_mode: "host"
+
