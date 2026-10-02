@@ -4,6 +4,13 @@
   args:
     chdir: "{{ grafana_compose_dir }}"
 
+- name: Reload Prometheus
+  uri:
+    url: "http://127.0.0.1:{{ prometheus_port }}/-/reload"
+    method: POST
+    status_code: 200
+  ignore_errors: true
+
 - name: Restart Prometheus
   command: docker compose restart prometheus
   args:

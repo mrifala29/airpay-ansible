@@ -16,7 +16,10 @@
     "service-level",
     "scylla",
     "clickhouse",
-    "yugabyte"
+    "yugabyte",
+    "redis",
+    "rabbitmq",
+    "aerospike"
   ],
   "templating": {
     "list": []
@@ -37,7 +40,7 @@
   "timezone": "browser",
   "title": "Airpay Stateful Databases & Services - Service Level Monitoring",
   "uid": "airpay-database-services",
-  "version": 2,
+  "version": 3,
   "panels": [
     {
       "collapsed": false,
@@ -84,7 +87,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
+        "w": 4,
         "x": 0,
         "y": 1
       },
@@ -116,7 +119,7 @@
           "refId": "A"
         }
       ],
-      "title": "ScyllaDB Online Nodes (of 3)",
+      "title": "ScyllaDB Nodes (of 3)",
       "type": "stat"
     },
     {
@@ -152,8 +155,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 6,
+        "w": 4,
+        "x": 4,
         "y": 1
       },
       "id": 3,
@@ -184,7 +187,7 @@
           "refId": "A"
         }
       ],
-      "title": "ClickHouse Online Nodes (of 3)",
+      "title": "ClickHouse Nodes (of 3)",
       "type": "stat"
     },
     {
@@ -220,8 +223,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 12,
+        "w": 4,
+        "x": 8,
         "y": 1
       },
       "id": 4,
@@ -288,8 +291,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 18,
+        "w": 4,
+        "x": 12,
         "y": 1
       },
       "id": 5,
@@ -314,13 +317,149 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "count(up{job=\"yugabytedb_master\"} == 1) or vector(0)",
+          "expr": "count(up{job=\"redis_service\"} == 1) or vector(0)",
           "instant": true,
-          "legendFormat": "Active Masters",
+          "legendFormat": "Active Pods",
           "refId": "A"
         }
       ],
-      "title": "YugabyteDB Masters (of 3)",
+      "title": "Redis Pods (of 3)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "count(up{job=\"rabbitmq_service\"} == 1) or vector(0)",
+          "instant": true,
+          "legendFormat": "Active Brokers",
+          "refId": "A"
+        }
+      ],
+      "title": "RabbitMQ Brokers (of 3)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "count(up{job=\"aerospike_service\"} == 1) or vector(0)",
+          "instant": true,
+          "legendFormat": "Active Nodes",
+          "refId": "A"
+        }
+      ],
+      "title": "Aerospike Nodes (of 3)",
       "type": "stat"
     },
     {
@@ -565,6 +704,15 @@
           "expr": "sum(rate(ClickHouseProfileEvents_InsertQuery[1m])) by (instance)",
           "legendFormat": "Insert QPS - {{instance}}",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(ClickHouseProfileEvents_Query[1m])) by (instance)",
+          "legendFormat": "Total QPS - {{instance}}",
+          "refId": "C"
         }
       ],
       "title": "ClickHouse Query Throughput (Select vs Insert QPS)",
@@ -623,9 +771,18 @@
           "expr": "sum(ClickHouseMetrics_TCPConnection) by (instance)",
           "legendFormat": "TCP Clients - {{instance}}",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(ClickHouseMetrics_HTTPConnection) by (instance)",
+          "legendFormat": "HTTP Clients - {{instance}}",
+          "refId": "C"
         }
       ],
-      "title": "ClickHouse Running Queries & TCP Client Connections",
+      "title": "ClickHouse Running Queries & Client Connections (TCP / HTTP)",
       "type": "timeseries"
     },
     {
@@ -788,7 +945,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(consistent_prefix_read_requests[1m])) by (instance)",
+          "expr": "sum(rate(handler_latency_yb_tserver_TabletServerService_Read_count[1m])) by (instance)",
           "legendFormat": "Reads - {{instance}}",
           "refId": "A"
         },
@@ -797,12 +954,534 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(active_write_query_objects[1m])) by (instance)",
+          "expr": "sum(rate(handler_latency_yb_tserver_TabletServerService_Write_count[1m])) by (instance)",
           "legendFormat": "Writes - {{instance}}",
           "refId": "B"
         }
       ],
       "title": "YugabyteDB Operations Throughput (Read & Write ops/s)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 22,
+      "title": "\ud83d\udfe5 Redis In-Memory Cache Performance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 30
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(redis_commands_processed_total{job=\"redis_service\"}[1m])) by (instance)",
+          "legendFormat": "OPS - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Redis Operations Throughput (commands/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 30
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(redis_connected_clients{job=\"redis_service\"}) by (instance)",
+          "legendFormat": "Clients - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(redis_blocked_clients{job=\"redis_service\"}) by (instance)",
+          "legendFormat": "Blocked - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Redis Connected Clients & Blocked Clients",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 30
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(redis_memory_used_bytes{job=\"redis_service\"}) by (instance)",
+          "legendFormat": "Memory Used - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Redis Memory Usage (bytes)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 26,
+      "title": "\ud83d\udc07 RabbitMQ Message Broker Performance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "msgps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 38
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=\"rabbitmq_service\"}[1m])) by (instance)",
+          "legendFormat": "Published msg/s - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(rabbitmq_channel_messages_delivered_total{job=\"rabbitmq_service\"}[1m])) by (instance)",
+          "legendFormat": "Delivered msg/s - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "RabbitMQ Message Throughput (Publish vs Deliver msg/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 38
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rabbitmq_queue_messages_ready{job=\"rabbitmq_service\"}) by (instance)",
+          "legendFormat": "Ready - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rabbitmq_queue_messages_unacked{job=\"rabbitmq_service\"}) by (instance)",
+          "legendFormat": "Unacknowledged - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "RabbitMQ Queue Depth (Ready vs Unacked Messages)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 38
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rabbitmq_connections{job=\"rabbitmq_service\"}) by (instance)",
+          "legendFormat": "Connections - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rabbitmq_channels{job=\"rabbitmq_service\"}) by (instance)",
+          "legendFormat": "Channels - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "RabbitMQ Active Client Connections & Channels",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "id": 30,
+      "title": "\u26a1 Aerospike Distributed In-Memory Cache Performance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 46
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_client_read_success{job=\"aerospike_service\"}[1m])) by (instance)",
+          "legendFormat": "Reads - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_client_write_success{job=\"aerospike_service\"}[1m])) by (instance)",
+          "legendFormat": "Writes - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Aerospike Operations (Read vs Write ops/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 46
+      },
+      "id": 32,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(aerospike_namespace_master_objects{job=\"aerospike_service\"}) by (instance)",
+          "legendFormat": "Master Objects - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Aerospike Stored Records (Objects in Namespace)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 46
+      },
+      "id": 33,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(aerospike_namespace_memory_used_bytes{job=\"aerospike_service\"}) by (instance)",
+          "legendFormat": "Memory Used - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Aerospike Memory Usage (RAM)",
       "type": "timeseries"
     }
   ]

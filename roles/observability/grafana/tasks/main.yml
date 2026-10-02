@@ -41,7 +41,9 @@
     src: prometheus.yml.j2
     dest: "{{ grafana_compose_dir }}/prometheus.yml"
     mode: '0644'
-  notify: Restart Prometheus
+  notify:
+    - Reload Prometheus
+    - Restart Prometheus
 
 - name: Template Grafana Datasources
   template:

@@ -160,8 +160,8 @@ scrape_configs:
   # --- SERVICE-LEVEL METRICS ---
   - job_name: 'scylladb_service'
     metrics_path: '/metrics'
-    static_configs:
 {% if groups['scylladb_nodes'] is defined and groups['scylladb_nodes'] | length > 0 %}
+    static_configs:
 {% for host in groups['scylladb_nodes'] %}
       - targets: ['{{ host }}:9180']
         labels:
@@ -170,6 +170,8 @@ scrape_configs:
           category: 'Database Service'
           environment: 'prod'
 {% endfor %}
+{% else %}
+    static_configs: []
 {% endif %}
     relabel_configs:
       - source_labels: [server_name]
@@ -177,8 +179,8 @@ scrape_configs:
 
   - job_name: 'clickhouse_service'
     metrics_path: '/metrics'
-    static_configs:
 {% if groups['clickhouse_nodes'] is defined and groups['clickhouse_nodes'] | length > 0 %}
+    static_configs:
 {% for host in groups['clickhouse_nodes'] %}
       - targets: ['{{ host }}:9363']
         labels:
@@ -187,6 +189,8 @@ scrape_configs:
           category: 'Database Service'
           environment: 'prod'
 {% endfor %}
+{% else %}
+    static_configs: []
 {% endif %}
     relabel_configs:
       - source_labels: [server_name]
@@ -194,8 +198,8 @@ scrape_configs:
 
   - job_name: 'yugabytedb_tserver'
     metrics_path: '/prometheus-metrics'
-    static_configs:
 {% if groups['yugabytedb_nodes'] is defined and groups['yugabytedb_nodes'] | length > 0 %}
+    static_configs:
 {% for host in groups['yugabytedb_nodes'] %}
       - targets: ['{{ host }}:9000']
         labels:
@@ -204,6 +208,8 @@ scrape_configs:
           category: 'Database Service'
           environment: 'prod'
 {% endfor %}
+{% else %}
+    static_configs: []
 {% endif %}
     relabel_configs:
       - source_labels: [server_name]
@@ -211,8 +217,8 @@ scrape_configs:
 
   - job_name: 'yugabytedb_master'
     metrics_path: '/prometheus-metrics'
-    static_configs:
 {% if groups['yugabytedb_nodes'] is defined and groups['yugabytedb_nodes'] | length > 0 %}
+    static_configs:
 {% for host in groups['yugabytedb_nodes'] %}
       - targets: ['{{ host }}:7000']
         labels:
@@ -221,25 +227,68 @@ scrape_configs:
           category: 'Database Service'
           environment: 'prod'
 {% endfor %}
+{% else %}
+    static_configs: []
 {% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
 
-{% if groups['redis_nodes'] is defined and groups['redis_nodes'] | length > 0 %}
-  - job_name: 'redis_exporter'
+  # --- CACHE & MESSAGING SERVICE-LEVEL METRICS ---
+  - job_name: 'redis_service'
     metrics_path: '/metrics'
+{% if eks_service_pods is defined and eks_service_pods.redis is defined and eks_service_pods.redis and (eks_service_pods.redis | length > 0) %}
     static_configs:
-{% for host in groups['redis_nodes'] %}
-      - targets: ['{{ host }}:9121']
+{% for pod in eks_service_pods.redis %}
+      - targets: ['{{ pod.ip }}:9121']
         labels:
-          server_name: 'redis-node-0{{ loop.index }}'
+          server_name: 'redis-pod-0{{ loop.index }}'
           service: 'Redis Cache'
           category: 'Cache Service'
           environment: 'prod'
 {% endfor %}
+{% else %}
+    static_configs: []
+{% endif %}
     relabel_configs:
       - source_labels: [server_name]
         target_label: instance
+
+  - job_name: 'rabbitmq_service'
+    metrics_path: '/metrics'
+{% if eks_service_pods is defined and eks_service_pods.rabbitmq is defined and eks_service_pods.rabbitmq and (eks_service_pods.rabbitmq | length > 0) %}
+    static_configs:
+{% for pod in eks_service_pods.rabbitmq %}
+      - targets: ['{{ pod.ip }}:15692']
+        labels:
+          server_name: 'rabbitmq-broker-0{{ loop.index }}'
+          service: 'RabbitMQ Broker'
+          category: 'Messaging Service'
+          environment: 'prod'
+{% endfor %}
+{% else %}
+    static_configs: []
 {% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+  - job_name: 'aerospike_service'
+    metrics_path: '/metrics'
+{% if eks_service_pods is defined and eks_service_pods.aerospike is defined and eks_service_pods.aerospike and (eks_service_pods.aerospike | length > 0) %}
+    static_configs:
+{% for pod in eks_service_pods.aerospike %}
+      - targets: ['{{ pod.ip }}:9145']
+        labels:
+          server_name: 'aerospike-node-0{{ loop.index }}'
+          service: 'Aerospike Cache'
+          category: 'Cache Service'
+          environment: 'prod'
+{% endfor %}
+{% else %}
+    static_configs: []
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
 
