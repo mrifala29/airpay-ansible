@@ -33,3 +33,14 @@
     port: "{{ yugabyte_port_tserver_web }}"
     delay: 10
     timeout: 240
+
+- name: Set YugabyteDB user password
+  command: >
+    docker exec -e PGPASSWORD="{{ yugabyte_password }}" airpay-yugabyte bin/ysqlsh -h 127.0.0.1 -p {{ yugabyte_port_ysql }} -U {{ yugabyte_user }} -c "ALTER USER {{ yugabyte_user }} WITH PASSWORD '{{ yugabyte_password }}';"
+  register: ysql_password_result
+  retries: 6
+  delay: 10
+  until: ysql_password_result.rc == 0
+  run_once: true
+  changed_when: true
+  ignore_errors: true

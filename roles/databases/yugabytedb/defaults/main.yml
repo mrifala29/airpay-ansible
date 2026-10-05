@@ -10,6 +10,10 @@ yugabyte_port_tserver_web: 9000
 yugabyte_port_ysql: 5433
 yugabyte_port_ycql: 9042
 
+# Credentials
+yugabyte_user: "yugabyte"
+yugabyte_password: "@Rnd123!"
+
 # Paths
 yugabyte_data_dir: "/opt/airpay/yugabyte/data"
 yugabyte_compose_dir: "/opt/airpay/yugabyte"
