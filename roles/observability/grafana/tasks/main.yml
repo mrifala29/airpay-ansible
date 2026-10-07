@@ -65,6 +65,7 @@
   loop:
     - dashboard-server-monitoring.json
     - dashboard-database-services.json
+    - dashboard-apisix-gateway.json
 
 
 - name: Template Compose

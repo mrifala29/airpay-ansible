@@ -292,3 +292,22 @@ scrape_configs:
       - source_labels: [server_name]
         target_label: instance
 
+  - job_name: 'apisix_service'
+    metrics_path: '/apisix/prometheus/metrics'
+{% if eks_service_pods is defined and eks_service_pods.apisix is defined and eks_service_pods.apisix and (eks_service_pods.apisix | length > 0) %}
+    static_configs:
+{% for pod in eks_service_pods.apisix %}
+      - targets: ['{{ pod.ip }}:9091']
+        labels:
+          server_name: 'apisix-gateway-0{{ loop.index }} (AZ-{{ ["a", "b", "c"][loop.index0] }})'
+          service: 'APISIX Ingress Gateway'
+          category: 'API Gateway & Ingress'
+          environment: 'prod'
+{% endfor %}
+{% else %}
+    static_configs: []
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
