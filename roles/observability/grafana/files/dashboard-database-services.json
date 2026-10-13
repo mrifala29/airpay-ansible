@@ -13,12 +13,10 @@
   "tags": [
     "airpay",
     "databases",
-    "service-level",
+    "storage",
     "scylla",
     "clickhouse",
     "yugabyte",
-    "redis",
-    "rabbitmq",
     "aerospike"
   ],
   "templating": {
@@ -38,9 +36,9 @@
     ]
   },
   "timezone": "browser",
-  "title": "Airpay Stateful Databases & Services - Service Level Monitoring",
+  "title": "Airpay Stateful Databases & Storage Engines",
   "uid": "airpay-database-services",
-  "version": 3,
+  "version": 9,
   "panels": [
     {
       "collapsed": false,
@@ -51,7 +49,7 @@
         "y": 0
       },
       "id": 1,
-      "title": "\ud83d\ude80 Database Cluster Status & Health Overview",
+      "title": "Database Cluster Status & Health Overview",
       "type": "row"
     },
     {
@@ -87,7 +85,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
+        "w": 6,
         "x": 0,
         "y": 1
       },
@@ -155,8 +153,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 4,
+        "w": 6,
+        "x": 6,
         "y": 1
       },
       "id": 3,
@@ -223,8 +221,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 8,
+        "w": 6,
+        "x": 12,
         "y": 1
       },
       "id": 4,
@@ -291,144 +289,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 12,
-        "y": 1
-      },
-      "id": 5,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "count(up{job=\"redis_service\"} == 1) or vector(0)",
-          "instant": true,
-          "legendFormat": "Active Pods",
-          "refId": "A"
-        }
-      ],
-      "title": "Redis Pods (of 3)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 1
-              },
-              {
-                "color": "green",
-                "value": 3
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 16,
-        "y": 1
-      },
-      "id": 20,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "count(up{job=\"rabbitmq_service\"} == 1) or vector(0)",
-          "instant": true,
-          "legendFormat": "Active Brokers",
-          "refId": "A"
-        }
-      ],
-      "title": "RabbitMQ Brokers (of 3)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 1
-              },
-              {
-                "color": "green",
-                "value": 3
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 20,
+        "w": 6,
+        "x": 18,
         "y": 1
       },
       "id": 21,
@@ -471,7 +333,7 @@
         "y": 5
       },
       "id": 6,
-      "title": "\u26a1 ScyllaDB Cluster Performance",
+      "title": "ScyllaDB Cluster Performance",
       "type": "row"
     },
     {
@@ -543,7 +405,7 @@
             "drawStyle": "line",
             "lineInterpolation": "smooth"
           },
-          "unit": "s"
+          "unit": "\u00b5s"
         },
         "overrides": []
       },
@@ -585,9 +447,203 @@
           "expr": "(sum(rate(scylla_storage_proxy_coordinator_write_latency_sum[1m])) / sum(rate(scylla_storage_proxy_coordinator_write_latency_count[1m]))) or vector(0)",
           "legendFormat": "Write Latency (avg)",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.99, sum(rate(scylla_storage_proxy_coordinator_read_latency_bucket[1m])) by (le)) or vector(0)",
+          "legendFormat": "Read Latency (p99)",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "histogram_quantile(0.99, sum(rate(scylla_storage_proxy_coordinator_write_latency_bucket[1m])) by (le)) or vector(0)",
+          "legendFormat": "Write Latency (p99)",
+          "refId": "D"
         }
       ],
-      "title": "ScyllaDB Average Coordinator Latency (s)",
+      "title": "ScyllaDB Coordinator Latency (Avg & P99) (\u00b5s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "errps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.01
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_database_total_reads_failed[1m])) by (instance) or vector(0)",
+          "legendFormat": "Read Failures - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_database_total_writes_failed[1m])) by (instance) or vector(0)",
+          "legendFormat": "Write Failures - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_transport_cql_errors_total[1m])) by (instance) or vector(0)",
+          "legendFormat": "CQL Errors - {{instance}}",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_storage_proxy_coordinator_cas_write_timeouts[1m])) by (instance) or vector(0)",
+          "legendFormat": "CAS Timeouts - {{instance}}",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_reactor_aio_errors[1m])) by (instance) or vector(0)",
+          "legendFormat": "AIO Errors - {{instance}}",
+          "refId": "E"
+        }
+      ],
+      "title": "ScyllaDB Database Errors, Timeouts & Drops (ops/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 13
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "(avg(scylla_reactor_utilization) by (instance)) * 100",
+          "legendFormat": "Avg Reactor CPU - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "(max(scylla_reactor_utilization) by (instance)) * 100",
+          "legendFormat": "Max Shard Reactor - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "ScyllaDB CPU & Reactor Saturation (%)",
       "type": "timeseries"
     },
     {
@@ -608,8 +664,8 @@
       "gridPos": {
         "h": 7,
         "w": 8,
-        "x": 16,
-        "y": 6
+        "x": 8,
+        "y": 13
       },
       "id": 9,
       "options": {
@@ -640,15 +696,342 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Delay.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*IOPS.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "iops"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 13
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(scylla_io_queue_queue_length) by (instance) or vector(0)",
+          "legendFormat": "Queue Length - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_io_queue_total_operations[1m])) by (instance) or vector(0)",
+          "legendFormat": "Total IOPS - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "(sum(scylla_io_queue_delay) by (instance)) or vector(0)",
+          "legendFormat": "Queue Delay (s) - {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "title": "ScyllaDB Disk I/O & Queue Depth",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 20
+      },
+      "id": 37,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(scylla_memory_allocated_memory) by (instance)",
+          "legendFormat": "Allocated Memory - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(scylla_memory_total_memory) by (instance)",
+          "legendFormat": "Total Memory - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(scylla_memory_dirty_bytes) by (instance)",
+          "legendFormat": "Dirty Memory (Memtable) - {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "title": "ScyllaDB Memory Management & Allocation",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "ops"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Hit Ratio.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 20
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "((sum(rate(scylla_cache_partition_hits[1m])) by (instance)) / (sum(rate(scylla_cache_partition_hits[1m])) by (instance) + sum(rate(scylla_cache_partition_misses[1m])) by (instance))) * 100 or vector(0)",
+          "legendFormat": "Hit Ratio (%) - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_cache_partition_hits[1m])) by (instance) or vector(0)",
+          "legendFormat": "Cache Hits/s - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_cache_partition_misses[1m])) by (instance) or vector(0)",
+          "legendFormat": "Cache Misses/s - {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "title": "ScyllaDB Cache Effectiveness & Hit Ratio (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Compactions/s.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ops"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 20
+      },
+      "id": 39,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(scylla_compaction_manager_pending_compactions) by (instance) or vector(0)",
+          "legendFormat": "Pending Compactions - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(scylla_compaction_manager_backlog) by (instance) or vector(0)",
+          "legendFormat": "Compaction Backlog - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(scylla_compaction_manager_compactions[1m])) by (instance) or vector(0)",
+          "legendFormat": "Compactions/s - {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "title": "ScyllaDB Background Compaction Pressure",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 27
       },
       "id": 10,
-      "title": "\ud83d\udcca ClickHouse OLAP Performance",
+      "title": "ClickHouse OLAP Performance",
       "type": "row"
     },
     {
@@ -670,7 +1053,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 14
+        "y": 28
       },
       "id": 11,
       "options": {
@@ -737,7 +1120,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 14
+        "y": 28
       },
       "id": 12,
       "options": {
@@ -796,7 +1179,7 @@
             "drawStyle": "line",
             "lineInterpolation": "smooth"
           },
-          "unit": "bytes"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -804,7 +1187,66 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 14
+        "y": 28
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "((sum(rate(ClickHouseProfileEvents_SelectQueryTimeMicroseconds[1m])) by (instance) / sum(rate(ClickHouseProfileEvents_SelectQuery[1m])) by (instance)) / 1000) or vector(0)",
+          "legendFormat": "Select Latency (avg) - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "((sum(rate(ClickHouseProfileEvents_InsertQueryTimeMicroseconds[1m])) by (instance) / sum(rate(ClickHouseProfileEvents_InsertQuery[1m])) by (instance)) / 1000) or vector(0)",
+          "legendFormat": "Insert Latency (avg) - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "ClickHouse Query Execution Latency (ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 35
       },
       "id": 13,
       "options": {
@@ -835,16 +1277,293 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Merged Rows.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ops"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 35
+      },
+      "id": 41,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(ClickHouseMetrics_BackgroundMergesAndMutationsPoolTask) by (instance) or vector(0)",
+          "legendFormat": "Active Merge Tasks - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(ClickHouseAsyncMetrics_TotalPartsOfMergeTreeTables) by (instance) or vector(0)",
+          "legendFormat": "Total Data Parts - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(ClickHouseProfileEvents_MergedRows[1m])) by (instance) or vector(0)",
+          "legendFormat": "Merged Rows/s - {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "title": "ClickHouse Background Parts Merges & Mutations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "errps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.01
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 35
+      },
+      "id": 42,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(ClickHouseProfileEvents_FailedQuery[1m])) by (instance) or vector(0)",
+          "legendFormat": "Total Failed Queries - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(ClickHouseProfileEvents_FailedSelectQuery[1m])) by (instance) or vector(0)",
+          "legendFormat": "Failed Selects - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(ClickHouseProfileEvents_FailedInsertQuery[1m])) by (instance) or vector(0)",
+          "legendFormat": "Failed Inserts - {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "title": "ClickHouse Query Failures & Exceptions (err/s)",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 42
       },
       "id": 14,
-      "title": "\ud83d\udc18 YugabyteDB Distributed SQL Performance",
+      "title": "YugabyteDB Distributed SQL Performance",
       "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 43
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(handler_latency_yb_tserver_TabletServerService_Read_count[1m])) by (instance)",
+          "legendFormat": "Reads - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(handler_latency_yb_tserver_TabletServerService_Write_count[1m])) by (instance)",
+          "legendFormat": "Writes - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "YugabyteDB Operations Throughput (Read & Write ops/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 43
+      },
+      "id": 43,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "((sum(rate(handler_latency_yb_tserver_TabletServerService_Read_sum[1m])) by (instance) / sum(rate(handler_latency_yb_tserver_TabletServerService_Read_count[1m])) by (instance)) / 1000) or vector(0)",
+          "legendFormat": "Read Latency (avg) - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "((sum(rate(handler_latency_yb_tserver_TabletServerService_Write_sum[1m])) by (instance) / sum(rate(handler_latency_yb_tserver_TabletServerService_Write_count[1m])) by (instance)) / 1000) or vector(0)",
+          "legendFormat": "Write Latency (avg) - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "YugabyteDB Tablet Operations Latency (ms)",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -863,9 +1582,9 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 12,
-        "x": 0,
-        "y": 22
+        "w": 8,
+        "x": 16,
+        "y": 43
       },
       "id": 15,
       "options": {
@@ -915,87 +1634,46 @@
             "drawStyle": "line",
             "lineInterpolation": "smooth"
           },
-          "unit": "ops"
+          "unit": "short"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 22
-      },
-      "id": 16,
-      "options": {
-        "legend": {
-          "displayMode": "table",
-          "placement": "bottom",
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ]
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rate(handler_latency_yb_tserver_TabletServerService_Read_count[1m])) by (instance)",
-          "legendFormat": "Reads - {{instance}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rate(handler_latency_yb_tserver_TabletServerService_Write_count[1m])) by (instance)",
-          "legendFormat": "Writes - {{instance}}",
-          "refId": "B"
-        }
-      ],
-      "title": "YugabyteDB Operations Throughput (Read & Write ops/s)",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 29
-      },
-      "id": 22,
-      "title": "\ud83d\udfe5 Redis In-Memory Cache Performance",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth"
-          },
-          "unit": "ops"
-        },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Conflicts.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ops"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.01
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 50
       },
-      "id": 23,
+      "id": 44,
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1015,12 +1693,30 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(redis_commands_processed_total{job=\"redis_service\"}[1m])) by (instance)",
-          "legendFormat": "OPS - {{instance}}",
+          "expr": "sum(transactions_running) by (instance) or vector(0)",
+          "legendFormat": "Running Transactions - {{instance}}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(transaction_conflicts[1m])) by (instance) or vector(0)",
+          "legendFormat": "Transaction Conflicts/s - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(write_operations_inflight) by (instance) or vector(0)",
+          "legendFormat": "Inflight Writes - {{instance}}",
+          "refId": "C"
         }
       ],
-      "title": "Redis Operations Throughput (commands/s)",
+      "title": "YugabyteDB Active Transactions & Conflicts",
       "type": "timeseries"
     },
     {
@@ -1036,15 +1732,28 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Memtable.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 50
       },
-      "id": 24,
+      "id": 45,
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1064,8 +1773,8 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(redis_connected_clients{job=\"redis_service\"}) by (instance)",
-          "legendFormat": "Clients - {{instance}}",
+          "expr": "sum(rocksdb_num_running_compactions) by (instance) or vector(0)",
+          "legendFormat": "Running Compactions - {{instance}}",
           "refId": "A"
         },
         {
@@ -1073,189 +1782,21 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(redis_blocked_clients{job=\"redis_service\"}) by (instance)",
-          "legendFormat": "Blocked - {{instance}}",
+          "expr": "sum(rocksdb_num_running_flushes) by (instance) or vector(0)",
+          "legendFormat": "Running Flushes - {{instance}}",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rocksdb_active_mem_table_total_size) by (instance) or vector(0)",
+          "legendFormat": "Memtable Total Size - {{instance}}",
+          "refId": "C"
         }
       ],
-      "title": "Redis Connected Clients & Blocked Clients",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth"
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 30
-      },
-      "id": 25,
-      "options": {
-        "legend": {
-          "displayMode": "table",
-          "placement": "bottom",
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ]
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(redis_memory_used_bytes{job=\"redis_service\"}) by (instance)",
-          "legendFormat": "Memory Used - {{instance}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Redis Memory Usage (bytes)",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 37
-      },
-      "id": 26,
-      "title": "\ud83d\udc07 RabbitMQ Message Broker Performance",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth"
-          },
-          "unit": "msgps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 38
-      },
-      "id": 27,
-      "options": {
-        "legend": {
-          "displayMode": "table",
-          "placement": "bottom",
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ]
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=\"rabbitmq_service\"}[1m])) by (instance)",
-          "legendFormat": "Published msg/s - {{instance}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rate(rabbitmq_channel_messages_delivered_total{job=\"rabbitmq_service\"}[1m])) by (instance)",
-          "legendFormat": "Delivered msg/s - {{instance}}",
-          "refId": "B"
-        }
-      ],
-      "title": "RabbitMQ Message Throughput (Publish vs Deliver msg/s)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth"
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 38
-      },
-      "id": 28,
-      "options": {
-        "legend": {
-          "displayMode": "table",
-          "placement": "bottom",
-          "calcs": [
-            "lastNotNull",
-            "max"
-          ]
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rabbitmq_queue_messages_ready{job=\"rabbitmq_service\"}) by (instance)",
-          "legendFormat": "Ready - {{instance}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "expr": "sum(rabbitmq_queue_messages_unacked{job=\"rabbitmq_service\"}) by (instance)",
-          "legendFormat": "Unacknowledged - {{instance}}",
-          "refId": "B"
-        }
-      ],
-      "title": "RabbitMQ Queue Depth (Ready vs Unacked Messages)",
+      "title": "YugabyteDB Storage Engine Flushes & Compactions (RocksDB)",
       "type": "timeseries"
     },
     {
@@ -1277,16 +1818,16 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 38
+        "y": 50
       },
-      "id": 29,
+      "id": 46,
       "options": {
         "legend": {
           "displayMode": "table",
           "placement": "bottom",
           "calcs": [
             "lastNotNull",
-            "max"
+            "min"
           ]
         },
         "tooltip": {
@@ -1299,8 +1840,8 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rabbitmq_connections{job=\"rabbitmq_service\"}) by (instance)",
-          "legendFormat": "Connections - {{instance}}",
+          "expr": "sum(ts_live_tablet_peers) by (instance) or vector(0)",
+          "legendFormat": "Live Tablet Peers - {{instance}}",
           "refId": "A"
         },
         {
@@ -1308,12 +1849,12 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rabbitmq_channels{job=\"rabbitmq_service\"}) by (instance)",
-          "legendFormat": "Channels - {{instance}}",
+          "expr": "sum(ts_split_op_apply) by (instance) or vector(0)",
+          "legendFormat": "Tablet Splits Applied - {{instance}}",
           "refId": "B"
         }
       ],
-      "title": "RabbitMQ Active Client Connections & Channels",
+      "title": "YugabyteDB Tablet Peers & Cluster Topology",
       "type": "timeseries"
     },
     {
@@ -1322,10 +1863,10 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 57
       },
       "id": 30,
-      "title": "\u26a1 Aerospike Distributed In-Memory Cache Performance",
+      "title": "Aerospike Distributed NoSQL Database Performance",
       "type": "row"
     },
     {
@@ -1347,7 +1888,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 46
+        "y": 58
       },
       "id": 31,
       "options": {
@@ -1397,6 +1938,202 @@
             "drawStyle": "line",
             "lineInterpolation": "smooth"
           },
+          "unit": "errps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.01
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 58
+      },
+      "id": 47,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_client_read_error[1m])) by (instance) or vector(0)",
+          "legendFormat": "Read Errors - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_client_read_timeout[1m])) by (instance) or vector(0)",
+          "legendFormat": "Read Timeouts - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_client_write_error[1m])) by (instance) or vector(0)",
+          "legendFormat": "Write Errors - {{instance}}",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_client_write_timeout[1m])) by (instance) or vector(0)",
+          "legendFormat": "Write Timeouts - {{instance}}",
+          "refId": "D"
+        }
+      ],
+      "title": "Aerospike Client Errors & Timeouts (err/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 58
+      },
+      "id": 48,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(aerospike_node_stats_client_connections) by (instance) or vector(0)",
+          "legendFormat": "Client Connections - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(aerospike_node_stats_fabric_connections) by (instance) or vector(0)",
+          "legendFormat": "Fabric Mesh Connections - {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Aerospike Client & Fabric Mesh Connections",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 65
+      },
+      "id": 33,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(aerospike_namespace_memory_used_bytes{job=\"aerospike_service\"}) by (instance)",
+          "legendFormat": "Memory Used - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Aerospike Memory Usage (RAM)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          },
           "unit": "short"
         },
         "overrides": []
@@ -1405,7 +2142,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 46
+        "y": 65
       },
       "id": 32,
       "options": {
@@ -1448,15 +2185,28 @@
           },
           "unit": "bytes"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Evictions.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ops"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 46
+        "y": 65
       },
-      "id": 33,
+      "id": 49,
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1476,12 +2226,30 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(aerospike_namespace_memory_used_bytes{job=\"aerospike_service\"}) by (instance)",
-          "legendFormat": "Memory Used - {{instance}}",
+          "expr": "sum(aerospike_namespace_device_used_bytes) by (instance) or vector(0)",
+          "legendFormat": "Device Disk Used - {{instance}}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(aerospike_namespace_device_total_bytes) by (instance) or vector(0)",
+          "legendFormat": "Device Disk Total - {{instance}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(aerospike_namespace_evict_ttl[1m])) by (instance) or vector(0)",
+          "legendFormat": "TTL Evictions/s - {{instance}}",
+          "refId": "C"
         }
       ],
-      "title": "Aerospike Memory Usage (RAM)",
+      "title": "Aerospike Storage Device Usage & Evictions",
       "type": "timeseries"
     }
   ]

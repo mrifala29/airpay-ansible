@@ -66,6 +66,7 @@
     - dashboard-server-monitoring.json
     - dashboard-database-services.json
     - dashboard-apisix-gateway.json
+    - dashboard-cache-messaging.json
 
 
 - name: Template Compose
