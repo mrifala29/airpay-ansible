@@ -1,0 +1,16 @@
+services:
+  prometheus:
+    image: prom/prometheus:{{ prometheus_version }}
+    container_name: airpay-prometheus
+    restart: unless-stopped
+    network_mode: "host"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time={{ prometheus_retention_time }}'
+      - '--web.listen-address=0.0.0.0:{{ prometheus_port }}'
+      - '--web.enable-lifecycle'
+    volumes:
+      - {{ prometheus_compose_dir }}/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - {{ prometheus_compose_dir }}/targets:/etc/prometheus/targets:ro
+      - {{ prometheus_data_dir }}:/prometheus

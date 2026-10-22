@@ -1,0 +1,10 @@
+services:
+  loki:
+    image: grafana/loki:{{ loki_version }}
+    container_name: airpay-loki
+    restart: unless-stopped
+    network_mode: "host"
+    command: -config.file=/etc/loki/loki.yml
+    volumes:
+      - {{ loki_compose_dir }}/loki.yml:/etc/loki/loki.yml:ro
+      - {{ loki_data_dir }}:/tmp/loki

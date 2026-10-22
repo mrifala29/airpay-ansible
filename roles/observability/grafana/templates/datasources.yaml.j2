@@ -5,7 +5,7 @@ datasources:
     type: prometheus
     uid: prometheus
     access: proxy
-    url: http://127.0.0.1:{{ prometheus_port }}
+    url: http://{{ prometheus_host | default('127.0.0.1') }}:{{ prometheus_port | default(9090) }}
     isDefault: true
     jsonData:
       timeInterval: 10s
@@ -15,7 +15,7 @@ datasources:
     type: loki
     uid: loki
     access: proxy
-    url: http://127.0.0.1:{{ loki_port }}
+    url: http://{{ loki_host | default('127.0.0.1') }}:{{ loki_port | default(3100) }}
     jsonData:
       maxLines: 1000
     editable: true
@@ -24,7 +24,7 @@ datasources:
     type: tempo
     uid: tempo
     access: proxy
-    url: http://127.0.0.1:{{ tempo_port }}
+    url: http://{{ tempo_host | default('127.0.0.1') }}:{{ tempo_port | default(3200) }}
     jsonData:
       httpMethod: GET
       tracesToLogsV2:

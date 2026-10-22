@@ -1,0 +1,5 @@
+---
+- name: Restart Tempo
+  command: docker compose restart tempo
+  args:
+    chdir: "{{ tempo_compose_dir }}"

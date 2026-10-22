@@ -1,0 +1,10 @@
+services:
+  tempo:
+    image: grafana/tempo:{{ tempo_version }}
+    container_name: airpay-tempo
+    restart: unless-stopped
+    network_mode: "host"
+    command: -config.file=/etc/tempo/tempo.yml
+    volumes:
+      - {{ tempo_compose_dir }}/tempo.yml:/etc/tempo/tempo.yml:ro
+      - {{ tempo_data_dir }}:/var/tempo

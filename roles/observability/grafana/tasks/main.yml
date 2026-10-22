@@ -6,7 +6,7 @@
     mount_owner: "472"
     mount_group: "472"
 
-- name: Create Observability Directories
+- name: Create Grafana Directories
   file:
     path: "{{ item }}"
     state: directory
@@ -18,7 +18,6 @@
     - "{{ grafana_compose_dir }}/provisioning/datasources"
     - "{{ grafana_compose_dir }}/provisioning/dashboards"
     - "{{ grafana_compose_dir }}/provisioning/dashboards/json"
-    - "{{ grafana_compose_dir }}/targets"
 
 - name: Ensure Grafana Data Directory Permissions
   file:
@@ -27,49 +26,6 @@
     mode: '0755'
     owner: "472"
     group: "472"
-
-- name: Ensure Prometheus Data Directory Permissions
-  file:
-    path: "{{ prometheus_data_dir }}"
-    state: directory
-    mode: '0755'
-    owner: "65534"
-    group: "65534"
-
-- name: Ensure Loki Data Directory Permissions
-  file:
-    path: "{{ loki_data_dir }}"
-    state: directory
-    mode: '0777'
-
-- name: Ensure Tempo Data Directory Permissions
-  file:
-    path: "{{ tempo_data_dir }}"
-    state: directory
-    mode: '0777'
-
-- name: Template Prometheus Configuration
-  template:
-    src: prometheus.yml.j2
-    dest: "{{ grafana_compose_dir }}/prometheus.yml"
-    mode: '0644'
-  notify:
-    - Reload Prometheus
-    - Restart Prometheus
-
-- name: Template Loki Configuration
-  template:
-    src: loki-config.yml.j2
-    dest: "{{ grafana_compose_dir }}/loki.yml"
-    mode: '0644'
-  notify: Restart Loki
-
-- name: Template Tempo Configuration
-  template:
-    src: tempo-config.yml.j2
-    dest: "{{ grafana_compose_dir }}/tempo.yml"
-    mode: '0644'
-  notify: Restart Tempo
 
 - name: Template Grafana Datasources
   template:
@@ -96,16 +52,14 @@
     - dashboard-cache-messaging.json
     - dashboard-otel-tracing-logs.json
 
-
-- name: Template Compose
-
+- name: Template Grafana Compose
   template:
     src: docker-compose.yml.j2
     dest: "{{ grafana_compose_dir }}/docker-compose.yml"
     mode: '0644'
   notify: Restart Grafana
 
-- name: Start Grafana & Prometheus
+- name: Start Grafana
   command: docker compose up -d
   args:
     chdir: "{{ grafana_compose_dir }}"

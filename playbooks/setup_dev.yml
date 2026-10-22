@@ -86,9 +86,37 @@
       tags: ['networking', 'apisix']
 
 # ----------------- OBSERVABILITY -----------------
+- name: Setup Prometheus
+  hosts: prometheus_nodes
+  become: true
+  roles:
+    - role: observability/prometheus
+      tags: ['observability', 'prometheus', 'grafana']
+
+- name: Setup Loki
+  hosts: loki_nodes
+  become: true
+  roles:
+    - role: observability/loki
+      tags: ['observability', 'loki']
+
+- name: Setup Tempo
+  hosts: tempo_nodes
+  become: true
+  roles:
+    - role: observability/tempo
+      tags: ['observability', 'tempo']
+
 - name: Setup Grafana
   hosts: grafana_nodes
   become: true
   roles:
     - role: observability/grafana
       tags: ['observability', 'grafana']
+
+- name: Setup Node Exporter on all EC2 hosts
+  hosts: airpay_nodes
+  become: true
+  roles:
+    - role: observability/node_exporter
+      tags: ['observability', 'node_exporter']

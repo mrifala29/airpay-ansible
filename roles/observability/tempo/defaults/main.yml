@@ -1,0 +1,15 @@
+---
+# Image
+tempo_version: "2.4.1"
+
+# Network
+tempo_port: 3200
+tempo_otlp_grpc_port: 4317
+tempo_otlp_http_port: 4318
+
+# Retention
+tempo_block_retention: "48h"
+
+# Paths
+tempo_compose_dir: "/opt/airpay/tempo"
+tempo_data_dir: "/opt/airpay/tempo/data"

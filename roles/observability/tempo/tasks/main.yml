@@ -1,0 +1,37 @@
+---
+- name: Create Tempo Compose Directory
+  file:
+    path: "{{ tempo_compose_dir }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: docker
+
+- name: Ensure Tempo Data Directory Permissions
+  file:
+    path: "{{ tempo_data_dir }}"
+    state: directory
+    mode: '0775'
+    owner: "10001"
+    group: "10001"
+
+- name: Template Tempo Configuration
+  template:
+    src: tempo-config.yml.j2
+    dest: "{{ tempo_compose_dir }}/tempo.yml"
+    mode: '0644'
+  notify: Restart Tempo
+
+- name: Template Tempo Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ tempo_compose_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart Tempo
+
+- name: Start Tempo
+  command: docker compose up -d
+  args:
+    chdir: "{{ tempo_compose_dir }}"
+  register: compose_output
+  changed_when: "'Started' in compose_output.stdout or 'Created' in compose_output.stdout"

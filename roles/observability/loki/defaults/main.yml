@@ -1,0 +1,14 @@
+---
+# Image
+loki_version: "3.0.0"
+
+# Network
+loki_port: 3100
+loki_grpc_port: 9096
+
+# Retention
+loki_retention_period: "168h"
+
+# Paths
+loki_compose_dir: "/opt/airpay/loki"
+loki_data_dir: "/opt/airpay/loki/data"

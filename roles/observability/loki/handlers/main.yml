@@ -1,0 +1,5 @@
+---
+- name: Restart Loki
+  command: docker compose restart loki
+  args:
+    chdir: "{{ loki_compose_dir }}"

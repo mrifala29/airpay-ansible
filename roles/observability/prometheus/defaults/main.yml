@@ -1,0 +1,13 @@
+---
+# Image
+prometheus_version: "v2.51.0"
+
+# Network
+prometheus_port: 9090
+
+# Retention
+prometheus_retention_time: "15d"
+
+# Paths
+prometheus_compose_dir: "/opt/airpay/prometheus"
+prometheus_data_dir: "/opt/airpay/prometheus/data"
