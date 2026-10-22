@@ -1,6 +1,6 @@
 ---
 - name: Restart Grafana
-  command: docker compose up -d --remove-orphans
+  command: docker compose restart grafana
   args:
     chdir: "{{ grafana_compose_dir }}"
 
@@ -13,5 +13,15 @@
 
 - name: Restart Prometheus
   command: docker compose restart prometheus
+  args:
+    chdir: "{{ grafana_compose_dir }}"
+
+- name: Restart Loki
+  command: docker compose restart loki
+  args:
+    chdir: "{{ grafana_compose_dir }}"
+
+- name: Restart Tempo
+  command: docker compose restart tempo
   args:
     chdir: "{{ grafana_compose_dir }}"

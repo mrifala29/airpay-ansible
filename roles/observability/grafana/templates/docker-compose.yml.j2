@@ -29,3 +29,23 @@ services:
       - {{ grafana_compose_dir }}/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - {{ grafana_compose_dir }}/targets:/etc/prometheus/targets:ro
       - {{ prometheus_data_dir }}:/prometheus
+
+  loki:
+    image: grafana/loki:{{ loki_version }}
+    container_name: airpay-loki
+    restart: unless-stopped
+    network_mode: "host"
+    command: -config.file=/etc/loki/loki.yml
+    volumes:
+      - {{ grafana_compose_dir }}/loki.yml:/etc/loki/loki.yml:ro
+      - {{ loki_data_dir }}:/tmp/loki
+
+  tempo:
+    image: grafana/tempo:{{ tempo_version }}
+    container_name: airpay-tempo
+    restart: unless-stopped
+    network_mode: "host"
+    command: -config.file=/etc/tempo/tempo.yml
+    volumes:
+      - {{ grafana_compose_dir }}/tempo.yml:/etc/tempo/tempo.yml:ro
+      - {{ tempo_data_dir }}:/var/tempo

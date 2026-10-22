@@ -36,6 +36,18 @@
     owner: "65534"
     group: "65534"
 
+- name: Ensure Loki Data Directory Permissions
+  file:
+    path: "{{ loki_data_dir }}"
+    state: directory
+    mode: '0777'
+
+- name: Ensure Tempo Data Directory Permissions
+  file:
+    path: "{{ tempo_data_dir }}"
+    state: directory
+    mode: '0777'
+
 - name: Template Prometheus Configuration
   template:
     src: prometheus.yml.j2
@@ -45,11 +57,26 @@
     - Reload Prometheus
     - Restart Prometheus
 
+- name: Template Loki Configuration
+  template:
+    src: loki-config.yml.j2
+    dest: "{{ grafana_compose_dir }}/loki.yml"
+    mode: '0644'
+  notify: Restart Loki
+
+- name: Template Tempo Configuration
+  template:
+    src: tempo-config.yml.j2
+    dest: "{{ grafana_compose_dir }}/tempo.yml"
+    mode: '0644'
+  notify: Restart Tempo
+
 - name: Template Grafana Datasources
   template:
     src: datasources.yaml.j2
     dest: "{{ grafana_compose_dir }}/provisioning/datasources/datasources.yaml"
     mode: '0644'
+  notify: Restart Grafana
 
 - name: Template Grafana Dashboards Provider
   template:
@@ -67,6 +94,7 @@
     - dashboard-database-services.json
     - dashboard-apisix-gateway.json
     - dashboard-cache-messaging.json
+    - dashboard-otel-tracing-logs.json
 
 
 - name: Template Compose

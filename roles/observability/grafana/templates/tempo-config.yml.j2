@@ -1,0 +1,32 @@
+server:
+  http_listen_port: {{ tempo_port }}
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        http:
+          endpoint: "0.0.0.0:{{ tempo_otlp_http_port }}"
+        grpc:
+          endpoint: "0.0.0.0:{{ tempo_otlp_grpc_port }}"
+
+ingester:
+  max_block_duration: 5m
+
+compactor:
+  compaction:
+    block_retention: 48h
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /var/tempo/wal
+    local:
+      path: /var/tempo/blocks
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics]
+
