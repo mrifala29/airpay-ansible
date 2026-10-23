@@ -18,6 +18,13 @@ datasources:
     url: http://{{ loki_host | default('127.0.0.1') }}:{{ loki_port | default(3100) }}
     jsonData:
       maxLines: 1000
+      derivedFields:
+        - datasourceUid: tempo
+          matcherType: label
+          matcherRegex: trace_id
+          name: trace_id
+          url: '$${__value.raw}'
+          urlDisplayLabel: 'Tempo Trace'
     editable: true
 
   - name: Tempo

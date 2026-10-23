@@ -637,6 +637,203 @@
         "x": 0,
         "y": 40
       },
+      "id": 104,
+      "title": "Application RED Metrics (Request Rate, Error Rate & Latency via SpanMetrics)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2
+          },
+          "noValue": "0 req/s",
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 41
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "descending"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum by (service_name) (rate(traces_spanmetrics_calls_total{service_name=~\"$service\"}[1m])) or sum by (job) (rate(http_server_duration_milliseconds_count[1m]))",
+          "legendFormat": "{{service_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Service Request Rate (RPS)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2
+          },
+          "max": 100,
+          "min": 0,
+          "noValue": "0%",
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 41
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "descending"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "((sum by (service_name) (rate(traces_spanmetrics_calls_total{service_name=~\"$service\", status_code=\"STATUS_CODE_ERROR\"}[1m])) or vector(0)) / (sum by (service_name) (rate(traces_spanmetrics_calls_total{service_name=~\"$service\"}[1m])) > 0)) * 100",
+          "legendFormat": "{{service_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Service Error Rate (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2
+          },
+          "noValue": "0 ms",
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 41
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "descending"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (le, service_name) (rate(traces_spanmetrics_duration_milliseconds_bucket{service_name=~\"$service\"}[1m]))) or (histogram_quantile(0.95, sum by (le, job) (rate(http_server_duration_milliseconds_bucket[1m]))))",
+          "legendFormat": "{{service_name}} (p95)",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Service Latency P95 (ms)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 49
+      },
       "id": 103,
       "title": "Microservices Host & Node Resource Utilization (Prometheus)",
       "type": "row"
@@ -669,7 +866,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 50
       },
       "id": 9,
       "options": {
@@ -732,7 +929,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 50
       },
       "id": 10,
       "options": {
@@ -807,23 +1004,23 @@
           },
           {
             "selected": false,
-            "text": "dot-integration",
-            "value": "dot-integration"
+            "text": "dot-integration-service",
+            "value": "dot-integration.*"
           },
           {
             "selected": false,
             "text": "dot-renewal",
-            "value": "dot-renewal"
+            "value": "dot-renewal.*"
           },
           {
             "selected": false,
-            "text": "actel-integration",
-            "value": "actel-integration"
+            "text": "actel-integration-service",
+            "value": "actel-integration.*"
           },
           {
             "selected": false,
             "text": "actel-renewal",
-            "value": "actel-renewal"
+            "value": "actel-renewal.*"
           },
           {
             "selected": false,
@@ -851,7 +1048,7 @@
             "value": "airpay-test-service"
           }
         ],
-        "query": "data-gov,dot-integration,dot-renewal,actel-integration,actel-renewal,cloud7-integration-banglalink,cloud7-integration-robi,cloud7-renewal-banglalink,cloud7-renewal-robi,airpay-test-service",
+        "query": "data-gov,dot-integration-service : dot-integration.*,dot-renewal : dot-renewal.*,actel-integration-service : actel-integration.*,actel-renewal : actel-renewal.*,cloud7-integration-banglalink,cloud7-integration-robi,cloud7-renewal-banglalink,cloud7-renewal-robi,airpay-test-service",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
