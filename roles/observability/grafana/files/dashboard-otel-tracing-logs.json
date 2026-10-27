@@ -12,7 +12,9 @@
       "icon": "dashboard",
       "includeVars": false,
       "keepTime": true,
-      "tags": ["airpay"],
+      "tags": [
+        "airpay"
+      ],
       "targetBlank": false,
       "title": "All Airpay Dashboards",
       "type": "dashboards"
@@ -468,7 +470,9 @@
       "id": 5,
       "options": {
         "legend": {
-          "calcs": ["sum"],
+          "calcs": [
+            "sum"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -523,7 +527,10 @@
       "id": 6,
       "options": {
         "legend": {
-          "calcs": ["mean", "max"],
+          "calcs": [
+            "mean",
+            "max"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -601,33 +608,20 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "tempo",
-        "uid": "tempo"
-      },
       "gridPos": {
-        "h": 12,
+        "h": 6,
         "w": 24,
         "x": 0,
         "y": 28
       },
       "id": 8,
-      "options": {},
+      "options": {
+        "content": "<div style=\"display: flex; gap: 24px; align-items: center; justify-content: space-between; padding: 16px 20px; background: rgba(30, 34, 42, 0.45); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);\">\n  <div style=\"flex: 1;\">\n    <h3 style=\"margin: 0 0 8px 0; color: #5794F2; font-size: 16px;\">\u26a1 Tempo Distributed Tracing & APM Navigation</h3>\n    <p style=\"margin: 0 0 8px 0; color: #D8D9DA; font-size: 13px; line-height: 1.5;\">\n      Di Grafana v10.4, pencarian TraceQL multi-span dijalankan langsung melalui <b>Grafana Explore</b>:\n    </p>\n    <ul style=\"margin: 0; padding-left: 20px; color: #9FA7B3; font-size: 13px; line-height: 1.6;\">\n      <li><b>Log-to-Trace Waterfall</b>: Pada panel <i>Real-time Application Logs (Loki)</i> di atas, klik badge <b>Tempo Trace</b> pada baris log mana pun untuk langsung membuka visualisasi flamegraph/waterfall trace.</li>\n      <li><b>TraceQL Search & Latency Explorer</b>: Klik tombol di samping untuk membuka Explore dengan query TraceQL yang terfilter otomatis sesuai microservice <code>${service}</code>.</li>\n    </ul>\n  </div>\n  <div>\n    <a href=\"/explore?left=%7B%22datasource%22%3A%22tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22query%22%3A%22%7B%20resource.service.name%20%3D~%20%5C%22${service}%5C%22%20%7D%22%7D%5D%7D\" target=\"_blank\" style=\"display: inline-block; padding: 12px 24px; background: #3274D9; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);\">\n      \ud83d\ude80 Buka TraceQL di Explore &rarr;\n    </a>\n  </div>\n</div>",
+        "mode": "html"
+      },
       "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "tempo",
-            "uid": "tempo"
-          },
-          "limit": 30,
-          "query": "{ resource.service.name =~ \"$service\" }",
-          "queryType": "traceql",
-          "refId": "A"
-        }
-      ],
-      "title": "Recent Traces & Latency Explorer (Tempo TraceQL)",
-      "type": "traces"
+      "title": "Tempo Distributed Tracing & APM Navigation",
+      "type": "text"
     },
     {
       "collapsed": false,
@@ -635,7 +629,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 34
       },
       "id": 104,
       "title": "Application RED Metrics (Request Rate, Error Rate & Latency via SpanMetrics)",
@@ -667,7 +661,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 41
+        "y": 35
       },
       "id": 12,
       "options": {
@@ -730,7 +724,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 41
+        "y": 35
       },
       "id": 13,
       "options": {
@@ -791,7 +785,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 41
+        "y": 35
       },
       "id": 14,
       "options": {
@@ -832,7 +826,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 43
       },
       "id": 103,
       "title": "Microservices Host & Node Resource Utilization (Prometheus)",
@@ -866,7 +860,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 44
       },
       "id": 9,
       "options": {
@@ -929,7 +923,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 44
       },
       "id": 10,
       "options": {
@@ -979,7 +973,7 @@
   "templating": {
     "list": [
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": "All",
@@ -1092,5 +1086,5 @@
   "timezone": "browser",
   "title": "Airpay Microservices APM - OpenTelemetry, Traces & Logs",
   "uid": "airpay-otel-tracing-logs",
-  "version": 2
+  "version": 3
 }
