@@ -616,7 +616,7 @@
       },
       "id": 8,
       "options": {
-        "content": "<div style=\"display: flex; gap: 24px; align-items: center; justify-content: space-between; padding: 16px 20px; background: rgba(30, 34, 42, 0.45); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);\">\n  <div style=\"flex: 1;\">\n    <h3 style=\"margin: 0 0 8px 0; color: #5794F2; font-size: 16px;\">\u26a1 Tempo Distributed Tracing & APM Navigation</h3>\n    <p style=\"margin: 0 0 8px 0; color: #D8D9DA; font-size: 13px; line-height: 1.5;\">\n      Di Grafana v10.4, pencarian TraceQL multi-span dijalankan langsung melalui <b>Grafana Explore</b>:\n    </p>\n    <ul style=\"margin: 0; padding-left: 20px; color: #9FA7B3; font-size: 13px; line-height: 1.6;\">\n      <li><b>Log-to-Trace Waterfall</b>: Pada panel <i>Real-time Application Logs (Loki)</i> di atas, klik badge <b>Tempo Trace</b> pada baris log mana pun untuk langsung membuka visualisasi flamegraph/waterfall trace.</li>\n      <li><b>TraceQL Search & Latency Explorer</b>: Klik tombol di samping untuk membuka Explore dengan query TraceQL yang terfilter otomatis sesuai microservice <code>${service}</code>.</li>\n    </ul>\n  </div>\n  <div>\n    <a href=\"/explore?left=%7B%22datasource%22%3A%22tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22query%22%3A%22%7B%20resource.service.name%20%3D~%20%5C%22${service}%5C%22%20%7D%22%7D%5D%7D\" target=\"_blank\" style=\"display: inline-block; padding: 12px 24px; background: #3274D9; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);\">\n      \ud83d\ude80 Buka TraceQL di Explore &rarr;\n    </a>\n  </div>\n</div>",
+        "content": "<div style=\"display: flex; gap: 24px; align-items: center; justify-content: space-between; padding: 16px 20px; background: rgba(30, 34, 42, 0.45); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);\">\n  <div style=\"flex: 1;\">\n    <h3 style=\"margin: 0 0 8px 0; color: #5794F2; font-size: 16px;\">\u26a1 Tempo Distributed Tracing & APM Navigation</h3>\n    <p style=\"margin: 0 0 8px 0; color: #D8D9DA; font-size: 13px; line-height: 1.5;\">\n      Di Grafana v10.4, pencarian TraceQL multi-span dijalankan langsung melalui <b>Grafana Explore</b>:\n    </p>\n    <ul style=\"margin: 0; padding-left: 20px; color: #9FA7B3; font-size: 13px; line-height: 1.6;\">\n      <li><b>Log-to-Trace Waterfall</b>: Pada panel <i>Real-time Application Logs (Loki)</i> di atas, klik badge <b>Tempo Trace</b> pada baris log mana pun untuk langsung membuka visualisasi flamegraph/waterfall trace.</li>\n      <li><b>TraceQL Search & Latency Explorer</b>: Klik tombol di samping untuk membuka Explore dengan query TraceQL yang terfilter otomatis sesuai microservice <code>${service:regex}</code>.</li>\n    </ul>\n  </div>\n  <div>\n    <a href=\"/explore?left=%7B%22datasource%22%3A%22tempo%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22tempo%22%2C%22uid%22%3A%22tempo%22%7D%2C%22queryType%22%3A%22traceql%22%2C%22query%22%3A%22%7B%20resource.service.name%20%3D~%20%5C%22${service:regex}%5C%22%20%7D%22%7D%5D%7D\" target=\"_blank\" style=\"display: inline-block; padding: 12px 24px; background: #3274D9; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);\">\n      \ud83d\ude80 Buka TraceQL di Explore &rarr;\n    </a>\n  </div>\n</div>",
         "mode": "html"
       },
       "pluginVersion": "10.4.1",
@@ -973,7 +973,7 @@
   "templating": {
     "list": [
       {
-        "allValue": ".+",
+        "allValue": "..*",
         "current": {
           "selected": true,
           "text": "All",
@@ -1086,5 +1086,5 @@
   "timezone": "browser",
   "title": "Airpay Microservices APM - OpenTelemetry, Traces & Logs",
   "uid": "airpay-otel-tracing-logs",
-  "version": 3
+  "version": 4
 }
