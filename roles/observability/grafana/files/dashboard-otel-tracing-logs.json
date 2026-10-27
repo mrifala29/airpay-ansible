@@ -999,22 +999,22 @@
           {
             "selected": false,
             "text": "dot-integration-service",
-            "value": "dot-integration.*"
+            "value": "dot-integration-service"
           },
           {
             "selected": false,
             "text": "dot-renewal",
-            "value": "dot-renewal.*"
+            "value": "dot-renewal"
           },
           {
             "selected": false,
             "text": "actel-integration-service",
-            "value": "actel-integration.*"
+            "value": "actel-integration-service"
           },
           {
             "selected": false,
             "text": "actel-renewal",
-            "value": "actel-renewal.*"
+            "value": "actel-renewal"
           },
           {
             "selected": false,
@@ -1042,7 +1042,7 @@
             "value": "airpay-test-service"
           }
         ],
-        "query": "data-gov,dot-integration-service : dot-integration.*,dot-renewal : dot-renewal.*,actel-integration-service : actel-integration.*,actel-renewal : actel-renewal.*,cloud7-integration-banglalink,cloud7-integration-robi,cloud7-renewal-banglalink,cloud7-renewal-robi,airpay-test-service",
+        "query": "data-gov,dot-integration-service,dot-renewal,actel-integration-service,actel-renewal,cloud7-integration-banglalink,cloud7-integration-robi,cloud7-renewal-banglalink,cloud7-renewal-robi,airpay-test-service",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -1086,5 +1086,5 @@
   "timezone": "browser",
   "title": "Airpay Microservices APM - OpenTelemetry, Traces & Logs",
   "uid": "airpay-otel-tracing-logs",
-  "version": 4
+  "version": 5
 }
