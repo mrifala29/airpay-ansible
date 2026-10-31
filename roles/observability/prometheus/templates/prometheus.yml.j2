@@ -311,3 +311,23 @@ scrape_configs:
       - source_labels: [server_name]
         target_label: instance
 
+  - job_name: 'temporal_service'
+    metrics_path: '/metrics'
+{% if eks_service_pods is defined and eks_service_pods.temporal is defined and eks_service_pods.temporal and (eks_service_pods.temporal | length > 0) %}
+    static_configs:
+{% for pod in eks_service_pods.temporal %}
+      - targets: ['{{ pod.ip }}:9090']
+        labels:
+          server_name: 'temporal-server-0{{ loop.index }}'
+          service: 'Temporal Workflow Engine'
+          category: 'Workflow Service'
+          environment: 'prod'
+{% endfor %}
+{% else %}
+    static_configs: []
+{% endif %}
+    relabel_configs:
+      - source_labels: [server_name]
+        target_label: instance
+
+

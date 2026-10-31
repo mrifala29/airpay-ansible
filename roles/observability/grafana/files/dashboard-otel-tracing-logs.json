@@ -687,7 +687,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (service_name) (rate(traces_spanmetrics_calls_total{service_name=~\"$service\"}[1m])) or sum by (job) (rate(http_server_duration_milliseconds_count[1m]))",
+          "expr": "sum by (service_name) (rate(traces_spanmetrics_calls_total{service_name=~\"$service\"}[1m]))",
           "legendFormat": "{{service_name}}",
           "range": true,
           "refId": "A"
